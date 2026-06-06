@@ -25,6 +25,6 @@ export class AppService {
     const target: EventEntity | null = await this.eventsRepo.create(dto);
     if (!target) throw new NotFoundException("Something went wrong");
     await this.eventsRepo.save(dto);
-    return target;
+    return target
   }
 }
