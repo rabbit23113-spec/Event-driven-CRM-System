@@ -1,0 +1,26 @@
+{
+  "name": "@event-sourcing-crm/api-gateway-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@event-sourcing-crm/api-gateway"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/api-gateway-e2e/jest.config.cts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@event-sourcing-crm/api-gateway:build",
+          "@event-sourcing-crm/api-gateway:serve"
+        ]
+      }
+    }
+  }
+}
