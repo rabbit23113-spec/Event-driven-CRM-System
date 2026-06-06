@@ -8,6 +8,12 @@
     },
     {
       "path": "./apps/api-gateway"
+    },
+    {
+      "path": "./apps/events-microservice-e2e"
+    },
+    {
+      "path": "./apps/events-microservice"
     }
   ]
 }
