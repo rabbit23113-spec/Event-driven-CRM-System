@@ -1,21 +1,37 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import {Test, TestingModule} from '@nestjs/testing';
+import {AppController} from './app.controller';
+import {AppService} from './app.service';
+import CreateEventDto, {Action, Domain} from "./dto/create-event.dto";
 
 describe('AppController', () => {
   let app: TestingModule;
+  const appServiceMock = {
+    createOne: jest.fn(),
+  }
 
   beforeAll(async () => {
     app = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [AppService, {
+        provide: AppService,
+        useValue: appServiceMock
+      }],
     }).compile();
   });
 
-  describe('getData', () => {
-    it('should return "Hello API"', () => {
+  describe('createOne', () => {
+    it('should return a new event from the database', async () => {
       const appController = app.get<AppController>(AppController);
-      expect(appController.getData()).toEqual({ message: 'Hello API' });
+      const dto: CreateEventDto = {
+        action: Action.CREATED,
+        domain: Domain.LEAD,
+        actorId: "aaaa-bbbb-cccc-dddd",
+      }
+      appServiceMock.createOne.mockResolvedValue(dto)
+      const newEvent = await appController.createOne({dto});
+      expect(newEvent.actorId).toEqual(dto.actorId);
+      expect(appServiceMock.createOne).toHaveBeenCalledWith(dto)
     });
   });
-});
+})
+;

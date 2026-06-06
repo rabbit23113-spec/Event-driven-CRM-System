@@ -22,9 +22,8 @@ export class AppService {
   }
 
   async createOne(dto: CreateEventDto): Promise<EventEntity> {
-    const target: EventEntity | null = await this.eventsRepo.create(dto);
-    if (!target) throw new NotFoundException("Something went wrong");
-    await this.eventsRepo.save(dto);
+    const target: EventEntity = this.eventsRepo.create(dto);
+    await this.eventsRepo.save(target);
     return target
   }
 }
