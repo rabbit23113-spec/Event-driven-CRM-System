@@ -1,0 +1,76 @@
+services:
+  crm_rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - .env
+  api_gateway:
+    build:
+      context: ./apps/api-gateway
+      dockerfile: ./Dockerfile
+  users_database:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "crm_users_database"
+    ports:
+      - "5432:5432"
+  leads_database:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "crm_leads_database"
+    ports:
+      - "5433:5432"
+  clients_database:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "crm_clients_database"
+    ports:
+      - "5434:5432"
+  events_database:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "crm_events_database"
+    ports:
+      - "5435:5432"
+  deals_database:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "crm_deals_database"
+    ports:
+      - "5436:5432"
+  tasks_database:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "crm_tasks_database"
+    ports:
+      - "5437:5432"
+  notes_database:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "crm_notes_database"
+    ports:
+      - "5438:5432"
+  auth_sessions_database:
+    image: postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: "crm_auth_sessions_database"
+    ports:
+      - "5439:5432"
