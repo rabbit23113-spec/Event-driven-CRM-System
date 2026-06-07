@@ -1,3 +1,6 @@
+import {IsEnum, IsUUID} from "class-validator";
+import {ApiProperty} from "@nestjs/swagger";
+
 export enum Domain {
   LEAD = "lead",
   CLIENT = "client",
@@ -14,10 +17,16 @@ export enum Action {
   STATUS_CHANGED = "status_changed"
 }
 
-class CreateEventDto {
+export class CreateEventDto {
+  @ApiProperty({ enum: Domain })
+  @IsEnum(Domain)
   domain: Domain;
+
+  @ApiProperty({ enum: Action })
+  @IsEnum(Action)
   action: Action;
+
+  @ApiProperty()
+  @IsUUID()
   actorId: string;
 }
-
-export default CreateEventDto;

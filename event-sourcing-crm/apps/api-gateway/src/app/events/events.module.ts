@@ -7,7 +7,7 @@ import * as constants from "../constants/constants"
 @Module({
   imports: [
     ClientsModule.register([{
-      name: constants.RMQ_CLIENT_ID,
+      name: constants.RMQ_EVENTS_CLIENT_ID,
       transport: Transport.RMQ,
       options: {
         urls: [`amqp://${constants.RMQ_USER}:${constants.RMQ_PASS}@${constants.RMQ_HOST}:${constants.RMQ_PORT}`],
