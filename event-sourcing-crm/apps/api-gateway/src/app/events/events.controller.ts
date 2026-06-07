@@ -1,6 +1,5 @@
-import {Body, Controller, Get, Inject, Post, Req} from '@nestjs/common';
+import {Body, Controller, Get, Post, Query} from '@nestjs/common';
 import {EventsService} from './events.service';
-import type {Request} from "express"
 import {EventDto} from "../dto/events/event.dto";
 import {CreateEventDto} from "../dto/events/create-event.dto";
 import {ApiOperation, ApiQuery, ApiResponse} from "@nestjs/swagger";
@@ -19,10 +18,9 @@ export class EventsController {
   })
   @ApiResponse({status: 200, type: EventDto, isArray: true})
   @Get("find")
-  async findEvents(@Req() req: Request): Promise<EventDto[] | EventDto> {
-    const id = req.query.id;
-    if (req.query.id) {
-      return await this.eventsService.findOne(String(id))
+  async findEvents(@Query("id") id: string): Promise<EventDto[] | EventDto> {
+    if (id) {
+      return await this.eventsService.findOne(id)
     } else {
       return await this.eventsService.findAll();
     }
