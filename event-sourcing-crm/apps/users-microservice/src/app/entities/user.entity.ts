@@ -1,6 +1,7 @@
-import {Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import {Role} from "../dto/create-user.dto";
 
+@Entity()
 export class UserEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -17,7 +18,7 @@ export class UserEntity {
   @Column({name: "password_hash"})
   passwordHash: string;
 
-  @Column({enum: Role, type: "simple-enum"})
+  @Column({enum: Role, type: "simple-enum", default: Role.SALES})
   role: Role;
 
   @CreateDateColumn({name: "created_at"})
