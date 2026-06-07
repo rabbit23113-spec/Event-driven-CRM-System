@@ -1,14 +1,16 @@
-import {Body, Controller, Get, Post, Req} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Post, Req} from '@nestjs/common';
 import { EventsService } from './events.service';
 import type { Request } from "express"
 import {EventDto} from "../dto/events/event.dto";
 import {CreateEventDto} from "../dto/events/create-event.dto";
 import {ApiOperation, ApiQuery, ApiResponse} from "@nestjs/swagger";
+import {CACHE_MANAGER} from "@nestjs/cache-manager";
+import type {Cache} from "cache-manager";
 
 
 @Controller('events')
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(private readonly eventsService: EventsService, @Inject(CACHE_MANAGER) private readonly cache: Cache) {}
 
   @ApiOperation({ summary: "Get all events or one by id" })
   @ApiQuery({
@@ -21,9 +23,21 @@ export class EventsController {
   async findEvents(@Req() req: Request): Promise<EventDto[] | EventDto> {
     const id = req.query.id;
     if (req.query.id) {
-      return await this.eventsService.findOne(String(id))
+      const event: string | undefined = await this.cache.get(`events:${id}`)
+      if (event) {
+        return JSON.parse(event)
+      }
+      const result = await this.eventsService.findOne(String(id))
+      await this.cache.set(`events:${id}`, JSON.stringify(result))
+      return result
     } else {
-      return await this.eventsService.findAll();
+      const events: string | undefined = await this.cache.get(`events:all`)
+      if (events) {
+        return JSON.parse(events)
+      }
+      const result =  await this.eventsService.findAll();
+      await this.cache.set(`events:all`, JSON.stringify(result))
+      return result
     }
   }
 

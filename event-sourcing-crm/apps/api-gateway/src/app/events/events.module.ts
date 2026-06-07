@@ -3,6 +3,8 @@ import {EventsService} from './events.service';
 import {EventsController} from './events.controller';
 import {ClientsModule, Transport} from "@nestjs/microservices";
 import * as constants from "../constants/constants"
+import {redisStore} from "cache-manager-redis-store";
+import {CacheModule} from "@nestjs/cache-manager";
 
 @Module({
   imports: [
@@ -17,6 +19,12 @@ import * as constants from "../constants/constants"
         },
       }
     }]),
+    CacheModule.register({
+      store: redisStore,
+      host: constants.REDIS_HOST,
+      port: constants.REDIS_PORT,
+      ttl: 60,
+    }),
   ],
   controllers: [EventsController],
   providers: [EventsService],
