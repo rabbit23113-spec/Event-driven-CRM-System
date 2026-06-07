@@ -1,12 +1,12 @@
-export const type = "";
-export const user = ""
-export const password = ""
-export const host = "";
-export const port = 5432;
-export const name = ""
+export const DATABASE_TYPE = "";
+export const DATABASE_USER = ""
+export const DATABASE_PASSWORD = ""
+export const DATABASE_HOST = "";
+export const DATABASE_PORT = 5432;
+export const DATABASE_NAME = ""
 
-export const rmq_queue = ""
-export const rmq_user = ""
-export const rmq_pass = ""
-export const rmq_container = ""
-export const rmq_port = ""
+export const RMQ_QUEUE = ""
+export const RMQ_USER = ""
+export const RMQ_PASS = ""
+export const RMQ_CONTAINER = ""
+export const RMQ_PORT = ""

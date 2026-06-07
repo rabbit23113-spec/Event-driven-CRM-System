@@ -1,0 +1,6 @@
+export const RMQ_QUEUE = ""
+export const RMQ_USER = ""
+export const RMQ_PASS = ""
+export const RMQ_CONTAINER = ""
+export const RMQ_PORT = ""
+export const RMQ_CLIENT_ID = ""
