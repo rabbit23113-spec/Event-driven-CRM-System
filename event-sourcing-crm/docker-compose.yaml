@@ -6,16 +6,25 @@ services:
       - "15672:15672"
     env_file:
       - .env
+  crm_redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
   api_gateway:
     build:
       context: ./apps/api-gateway/
       dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - events_microservice
   events_microservice:
     build:
       context: ./apps/events-microservice/
       dockerfile: ./Dockerfile
     depends_on:
       - events_database
+      - crm_rabbitmq
   users_database:
     image: postgres
     env_file:

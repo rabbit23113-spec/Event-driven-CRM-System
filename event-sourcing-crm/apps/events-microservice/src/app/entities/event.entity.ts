@@ -6,10 +6,10 @@ class Event {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({enum: Domain})
+  @Column({enum: Domain, type: "simple-enum"})
   domain: Domain;
 
-  @Column({enum: Action})
+  @Column({enum: Action, type: "simple-enum"})
   action: Action;
 
   @Column({name: "actor_id"})

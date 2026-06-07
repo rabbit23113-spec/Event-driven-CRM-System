@@ -1,6 +1,6 @@
 import {Test} from '@nestjs/testing';
 import {AppService} from './app.service';
-import CreateEventDto, {Action, Domain} from "./dto/create-event.dto";
+import {Action, CreateEventDto, Domain} from "./dto/create-event.dto";
 import {getRepositoryToken} from "@nestjs/typeorm";
 import EventEntity from "./entities/event.entity";
 

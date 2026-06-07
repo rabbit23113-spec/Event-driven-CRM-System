@@ -1,7 +1,7 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
-import CreateEventDto, {Action, Domain} from "./dto/create-event.dto";
+import {Action, CreateEventDto, Domain} from "./dto/create-event.dto";
 
 describe('AppController', () => {
   let app: TestingModule;

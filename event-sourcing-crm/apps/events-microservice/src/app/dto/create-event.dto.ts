@@ -14,10 +14,8 @@ export enum Action {
   STATUS_CHANGED = "status_changed"
 }
 
-class CreateEventDto {
+export class CreateEventDto {
   domain: Domain;
   action: Action;
   actorId: string;
 }
-
-export default CreateEventDto;

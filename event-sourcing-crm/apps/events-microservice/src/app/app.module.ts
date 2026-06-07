@@ -15,7 +15,7 @@ import Event from "./entities/event.entity";
     database: constants.DATABASE_NAME,
     synchronize: true,
     entities: [Event]
-  })],
+  }), TypeOrmModule.forFeature([Event])],
   controllers: [AppController],
   providers: [AppService],
 })
