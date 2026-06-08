@@ -19,6 +19,7 @@ services:
     depends_on:
       - events_microservice
       - users_microservice
+      - leads_microservice
   events_microservice:
     build:
       context: ./apps/events-microservice/
