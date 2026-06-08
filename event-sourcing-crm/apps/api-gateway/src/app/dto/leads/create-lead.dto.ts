@@ -1,6 +1,6 @@
 import {Status} from "./lead.dto";
 import {ApiProperty} from "@nestjs/swagger";
-import {IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsUUID} from "class-validator";
+import {IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, IsUUID} from "class-validator";
 
 export class CreateLeadDto {
   @ApiProperty()
@@ -8,14 +8,17 @@ export class CreateLeadDto {
   name: string;
 
   @ApiProperty()
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
   @ApiProperty()
+  @IsNotEmpty()
   @IsPhoneNumber("RU")
   phone: string;
 
   @ApiProperty()
+  @IsString()
   @IsNotEmpty()
   source: string;
 
@@ -25,6 +28,7 @@ export class CreateLeadDto {
   status: Status;
 
   @ApiProperty()
+  @IsNotEmpty()
   @IsUUID()
   ownerId: string;
 }
