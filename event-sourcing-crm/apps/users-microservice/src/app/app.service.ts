@@ -1,14 +1,16 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {UserEntity} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import {CreateUserDto, Role} from "./dto/create-user.dto";
 import bcrypt from "bcryptjs";
 import {UpdateUserDto} from "./dto/update-user.dto";
+import {ClientProxy} from "@nestjs/microservices";
+import {RMQ_EVENTS_CLIENT_ID} from "./constants/constants";
 
 @Injectable()
 export class AppService {
-  constructor (@InjectRepository(UserEntity) private readonly usersRepo: Repository<UserEntity>) {}
+  constructor (@InjectRepository(UserEntity) private readonly usersRepo: Repository<UserEntity>, @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy) {}
 
   async findAll(): Promise<UserEntity[]> {
     return await this.usersRepo.find();
@@ -43,6 +45,7 @@ export class AppService {
     const passwordHash = await bcrypt.hash(dto.password, salt);
     const user = this.usersRepo.create({ ...dto, passwordHash });
     await this.usersRepo.save(user);
+    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "created", actorId: user.id })
     return user
   }
 
@@ -52,6 +55,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`Cannot find user with id ${id}`);
     }
+    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "updated", actorId: target.id })
     await this.usersRepo.update(id, { email, firstName, lastName });
   }
 
@@ -60,6 +64,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`Cannot find user with id ${id}`);
     }
+    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "deleted", actorId: target.id })
     await this.usersRepo.delete(id);
   }
 }

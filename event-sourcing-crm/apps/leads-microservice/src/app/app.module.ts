@@ -4,6 +4,7 @@ import {AppService} from './app.service';
 import * as constants from './constants/constants'
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {LeadEntity} from "./entities/lead.entity";
+import {ClientsModule, Transport} from "@nestjs/microservices";
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -15,7 +16,20 @@ import {LeadEntity} from "./entities/lead.entity";
     database: constants.DATABASE_NAME,
     synchronize: true,
     entities: [LeadEntity]
-  }), TypeOrmModule.forFeature([LeadEntity])],
+  }),
+    TypeOrmModule.forFeature([LeadEntity]),
+    ClientsModule.register([{
+      name: constants.RMQ_EVENTS_CLIENT_ID,
+      transport: Transport.RMQ,
+      options: {
+        urls: [`amqp://${constants.RMQ_USER}:${constants.RMQ_PASS}@${constants.RMQ_HOST}:${constants.RMQ_PORT}`],
+        queue: constants.RMQ_EVENTS_QUEUE,
+        queueOptions: {
+          durable: true,
+        },
+      }
+    }]),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

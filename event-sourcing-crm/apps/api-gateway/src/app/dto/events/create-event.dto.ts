@@ -7,7 +7,8 @@ export enum Domain {
   DEAL = "deal",
   TASK = "task",
   AUTH = "auth",
-  NOTE = "note"
+  NOTE = "note",
+  USER = "user",
 }
 
 export enum Action {
