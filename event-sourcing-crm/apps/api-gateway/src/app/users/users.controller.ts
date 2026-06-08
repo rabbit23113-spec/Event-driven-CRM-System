@@ -1,43 +1,56 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, Query} from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseEnumPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import {UsersService} from './users.service';
-import {ApiOperation, ApiQuery, ApiResponse} from "@nestjs/swagger";
+import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {UserDto} from "../dto/users/user.dto";
 import {CreateUserDto, Role} from "../dto/users/create-user.dto";
 import {UpdateUserDto} from "../dto/users/update-user.dto";
+import {isEmail, isUUID} from "class-validator";
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {
   }
 
-  @ApiOperation({summary: "Get: all users, users by role, user by id or by email"})
-  @ApiQuery({
-    name: 'id',
-    type: 'string',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'email',
-    type: 'string',
-    required: false,
-  })
-  @ApiQuery({
-    name: 'role',
-    type: "string",
-    required: false,
-  })
+  @ApiOperation({summary: "Get users"})
   @ApiResponse({status: 200, type: UserDto, isArray: true})
   @Get("find")
-  async findEvents(@Query("id") id: string, @Query("email") email: string, @Query("role") role: Role): Promise<UserDto[] | UserDto> {
-    if (id) {
-      return await this.usersService.findOne(id)
-    } else if (email) {
-      return await this.usersService.findOneByEmail(email);
-    } else if (role) {
-      return await this.usersService.findByRole(role)
-    } else {
-      return await this.usersService.findAll()
-    }
+  async findAll(): Promise<UserDto[]> {
+    return await this.usersService.findAll();
+  }
+
+  @ApiOperation({summary: "Get user by id"})
+  @ApiParam({name: "id"})
+  @ApiResponse({status: 200, type: UserDto})
+  @Get("find/id/:id")
+  async findOne(@Param("id") id: string): Promise<UserDto> {
+    return await this.usersService.findOne(id);
+  }
+
+  @ApiOperation({summary: "Get users by role"})
+  @ApiParam({name: "role"})
+  @ApiResponse({status: 200, type: UserDto})
+  @Get("find/role/:role")
+  async findByRole(@Param("role", new ParseEnumPipe(Role)) role: Role): Promise<UserDto[]> {
+    return await this.usersService.findByRole(role);
+  }
+
+  @ApiOperation({summary: "Get user by email"})
+  @ApiParam({name: "email"})
+  @ApiResponse({status: 200, type: UserDto})
+  @Get("find/email/:email")
+  async findOneByEmail(@Param("email") email: string): Promise<UserDto> {
+    if (!isEmail(email)) throw new BadRequestException("Invalid email");
+    return await this.usersService.findOneByEmail(email);
   }
 
   @ApiOperation({summary: "Create user"})
@@ -58,6 +71,7 @@ export class UsersController {
   @ApiResponse({status: 204})
   @Delete("delete/:id")
   async deleteOne(@Param("id") id: string): Promise<void> {
+    if (!isUUID(id)) throw new BadRequestException("Invalid UUID");
     await this.usersService.deleteUser(id);
   }
 }
