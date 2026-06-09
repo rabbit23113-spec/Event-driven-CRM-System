@@ -2,7 +2,7 @@ import {Controller} from '@nestjs/common';
 import {AppService} from './app.service';
 import {EventPattern, MessagePattern, Payload} from "@nestjs/microservices";
 import {DealEntity, Status} from "./entities/deal.entity";
-import {UpdateDealDto} from "./entities/update-deal.dto";
+import {UpdateDealDto} from "./dto/update-deal.dto";
 import {CreateDealDto} from "./dto/create-deal.dto";
 
 @Controller()

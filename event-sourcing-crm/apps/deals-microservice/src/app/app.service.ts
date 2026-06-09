@@ -5,7 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {RMQ_EVENTS_CLIENT_ID} from "./constants/constants";
 import {Repository} from "typeorm";
 import {CreateDealDto} from "./dto/create-deal.dto";
-import {UpdateDealDto} from "./entities/update-deal.dto";
+import {UpdateDealDto} from "./dto/update-deal.dto";
 
 @Injectable()
 export class AppService {

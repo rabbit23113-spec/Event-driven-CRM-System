@@ -5,9 +5,10 @@ import {EventsModule} from './events/events.module';
 import { UsersModule } from './users/users.module';
 import { LeadsModule } from './leads/leads.module';
 import { ClientsModule } from './clients/clients.module';
+import { DealsModule } from './deals/deals.module';
 
 @Module({
-  imports: [EventsModule, UsersModule, LeadsModule, ClientsModule],
+  imports: [EventsModule, UsersModule, LeadsModule, ClientsModule, DealsModule],
   controllers: [AppController],
   providers: [AppService],
 })

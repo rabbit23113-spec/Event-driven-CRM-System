@@ -1,4 +1,4 @@
-import {Status} from "./deal.entity";
+import {Status} from "../entities/deal.entity";
 
 export class UpdateDealDto {
   id: string;
