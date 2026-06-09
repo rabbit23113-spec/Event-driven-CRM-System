@@ -18,5 +18,6 @@ export enum Action {
 export class CreateEventDto {
   domain: Domain;
   action: Action;
-  actorId: string;
+  actorId?: string;
+  subjectId: string;
 }

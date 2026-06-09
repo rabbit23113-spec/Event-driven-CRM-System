@@ -12,8 +12,11 @@ class Event {
   @Column({enum: Action, type: "simple-enum"})
   action: Action;
 
-  @Column({name: "actor_id"})
-  actorId: string;
+  @Column({name: "actor_id", nullable: true})
+  actorId: string | null;
+
+  @Column({name: "subject_id"})
+  subjectId: string;
 
   @CreateDateColumn({name: "created_at"})
   createdAt: Date;

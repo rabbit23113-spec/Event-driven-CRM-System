@@ -30,4 +30,8 @@ export class CreateEventDto {
   @ApiProperty()
   @IsUUID()
   actorId: string;
+
+  @ApiProperty()
+  @IsUUID()
+  subjectId: string;
 }

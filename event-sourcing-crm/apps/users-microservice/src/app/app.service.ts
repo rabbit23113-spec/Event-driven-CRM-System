@@ -45,7 +45,7 @@ export class AppService {
     const passwordHash = await bcrypt.hash(dto.password, salt);
     const user = this.usersRepo.create({ ...dto, passwordHash });
     await this.usersRepo.save(user);
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "created", actorId: user.id })
+    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "created", subjectId: user.id });
     return user
   }
 
@@ -55,16 +55,16 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`Cannot find user with id ${id}`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "updated", actorId: target.id })
+    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "updated", subjectId: target.id })
     await this.usersRepo.update(id, { email, firstName, lastName });
   }
 
   async deleteUser(id: string): Promise<void> {
-    const target = this.findOne(id);
+    const target = await this.findOne(id);
     if (!target) {
       throw new NotFoundException(`Cannot find user with id ${id}`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "deleted", actorId: target.id })
+    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "user", action: "deleted", subjectId: target.id })
     await this.usersRepo.delete(id);
   }
 }
