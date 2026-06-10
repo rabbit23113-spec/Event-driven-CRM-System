@@ -22,7 +22,8 @@ services:
       - leads_microservice
       - clients_microservice
       - deals_microservice
-      - notes_database
+      - notes_microservice
+      - tasks_microservice
   events_microservice:
     build:
       context: ./apps/events-microservice/
@@ -64,6 +65,13 @@ services:
       dockerfile: ./Dockerfile
     depends_on:
       - notes_database
+      - crm_rabbitmq
+  tasks_microservice:
+    build:
+      context: ./apps/tasks-microservice/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - tasks_database
       - crm_rabbitmq
   users_database:
     image: postgres
