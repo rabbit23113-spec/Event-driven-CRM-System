@@ -1,5 +1,17 @@
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 
+export enum Priority {
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
+}
+
+export enum Status {
+  TODO = "todo",
+  IN_PROGRESS = "in_progress",
+  DONE = "done",
+}
+
 @Entity()
 export class TaskEntity {
   @PrimaryGeneratedColumn("uuid")
@@ -11,11 +23,11 @@ export class TaskEntity {
   @Column()
   description: string;
 
-  @Column()
-  status: string;
+  @Column({ enum: Status, type: "simple-enum", default: Status.TODO })
+  status: Status;
 
-  @Column()
-  priority: string;
+  @Column({ enum: Priority, type: "simple-enum" })
+  priority: Priority;
 
   @Column({ name: "due_date", type: "datetime", nullable: true })
   dueDate: Date;
