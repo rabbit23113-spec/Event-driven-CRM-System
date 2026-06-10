@@ -29,7 +29,7 @@ export class TaskEntity {
   @Column({ enum: Priority, type: "simple-enum" })
   priority: Priority;
 
-  @Column({ name: "due_date", type: "datetime", nullable: true })
+  @Column({ name: "due_date", type: "date", nullable: true })
   dueDate: Date;
 
   @Column({ name: "assignee_id" })
