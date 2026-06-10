@@ -1,0 +1,26 @@
+{
+  "name": "@event-sourcing-crm/tasks-microservice-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@event-sourcing-crm/tasks-microservice"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/tasks-microservice-e2e/jest.config.cts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@event-sourcing-crm/tasks-microservice:build",
+          "@event-sourcing-crm/tasks-microservice:serve"
+        ]
+      }
+    }
+  }
+}

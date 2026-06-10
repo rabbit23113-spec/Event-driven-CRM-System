@@ -44,6 +44,12 @@
     },
     {
       "path": "./apps/notes-microservice"
+    },
+    {
+      "path": "./apps/tasks-microservice-e2e"
+    },
+    {
+      "path": "./apps/tasks-microservice"
     }
   ]
 }

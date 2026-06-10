@@ -61,7 +61,8 @@
         "apps/clients-microservice-e2e/**/*",
         "apps/clients-microservice-e2e/**/*",
         "apps/deals-microservice-e2e/**/*",
-        "apps/notes-microservice-e2e/**/*"
+        "apps/notes-microservice-e2e/**/*",
+        "apps/tasks-microservice-e2e/**/*"
       ]
     }
   ],
