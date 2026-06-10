@@ -12,13 +12,13 @@ export class NoteEntity {
   authorId: string;
 
   @Column({ name: "client_id", nullable: true })
-  clientId: string | null;
+  clientId: string;
 
   @Column({ name: "lead_id", nullable: true })
-  leadId: string | null;
+  leadId: string;
 
   @Column({ name: "deal_id", nullable: true })
-  dealId: string | null;
+  dealId: string;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;
