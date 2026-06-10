@@ -8,5 +8,5 @@ export class CreateTaskDto {
   assigneeId: string;
   relatedLeadId?: string;
   relatedClientId?: string;
-  relatedDeadId?: string;
+  relatedDealId?: string;
 }
