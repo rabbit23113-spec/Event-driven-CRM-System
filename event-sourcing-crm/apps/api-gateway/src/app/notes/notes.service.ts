@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {RMQ_NOTES_CLIENT_ID} from "../constants/constants";
-import {ClientProxy, MessagePattern} from "@nestjs/microservices";
+import {ClientProxy} from "@nestjs/microservices";
 import {CACHE_MANAGER} from "@nestjs/cache-manager";
 import type {Cache} from "cache-manager";
 import {NoteDto} from "../dto/notes/note.dto";
@@ -13,7 +13,6 @@ export class NotesService {
   constructor(@Inject(RMQ_NOTES_CLIENT_ID) private readonly client: ClientProxy, @Inject(CACHE_MANAGER) private readonly cache: Cache) {
   }
 
-  @MessagePattern({cmd: "notes.microservice: findAll"})
   async findAll(): Promise<NoteDto[]> {
     const cachedNotes: NoteDto[] | undefined = await this.cache.get("notes:all")
     if (cachedNotes) {
