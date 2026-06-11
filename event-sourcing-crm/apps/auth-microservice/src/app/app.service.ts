@@ -86,6 +86,10 @@ export class AppService {
 
   async signIn(dto: SignInDto): Promise<AccessTokenDto> {
     const user: UserDto = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findByEmail"}, {email: dto.email}))
+    const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
+    if (!isMatch) {
+      throw new UnauthorizedException("Incorrect email or password");
+    }
     await this.createOne({userId: user.id, ip: "mock"})
     return await this.generateAccessToken(user.id)
   }
