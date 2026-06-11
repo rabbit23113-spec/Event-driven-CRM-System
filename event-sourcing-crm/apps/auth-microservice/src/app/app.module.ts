@@ -4,6 +4,7 @@ import {AppService} from './app.service';
 import {ClientsModule, Transport} from "@nestjs/microservices";
 import * as constants from './constants/constants'
 import {TypeOrmModule} from "@nestjs/typeorm";
+import {AuthSessionEntity} from "./entities/auth-session.entity";
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -14,9 +15,9 @@ import {TypeOrmModule} from "@nestjs/typeorm";
     password: constants.DATABASE_PASSWORD,
     database: constants.DATABASE_NAME,
     synchronize: true,
-    entities: []
+    entities: [AuthSessionEntity]
   }),
-    TypeOrmModule.forFeature([]),
+    TypeOrmModule.forFeature([AuthSessionEntity]),
     ClientsModule.register([{
       name: constants.RMQ_EVENTS_CLIENT_ID,
       transport: Transport.RMQ,
