@@ -1,13 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-function copyIfMissing(from, to) {
-  if (!fs.existsSync(to)) {
-    fs.copyFileSync(from, to);
-    console.log(`Created: ${to}`);
-  }
-}
-
 function walk(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
