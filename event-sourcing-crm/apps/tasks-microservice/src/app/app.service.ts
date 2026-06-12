@@ -109,7 +109,7 @@ export class AppService {
   async createOne(dto: CreateTaskDto): Promise<TaskEntity> {
     const task = await this.taskRepo.create(dto);
     await this.taskRepo.save(task);
-    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "task",
       action: "created",
       actorId: dto.assigneeId,
@@ -124,7 +124,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`TaskEntity with id ${id} not found`);
     }
-    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "task",
       action: "updated",
       actorId: dto.assigneeId,
@@ -140,7 +140,7 @@ export class AppService {
       throw new NotFoundException(`TaskEntity with id ${id} not found`);
     }
     await this.taskRepo.update(id, dto)
-    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "task",
       action: "status_changed",
       actorId: "mock",
@@ -153,7 +153,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`TaskEntity with id ${id} not found`);
     }
-    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "task",
       action: "deleted",
       actorId: target.assigneeId,

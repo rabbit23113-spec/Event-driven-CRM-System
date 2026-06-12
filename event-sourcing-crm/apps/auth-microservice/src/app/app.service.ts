@@ -69,7 +69,7 @@ export class AppService {
     const refreshTokenHash = await bcrypt.hash(refreshToken, salt)
     const authSession = await this.authSessionRepo.create({...dto, expiresAt: new Date(expiresAt), refreshTokenHash})
     await this.authSessionRepo.save(authSession);
-    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "auth",
       action: "created",
       subjectId: dto.userId
@@ -127,7 +127,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`Auth session with id: ${id} not found`);
     }
-    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "auth",
       action: "deleted",
       subjectId: target.id

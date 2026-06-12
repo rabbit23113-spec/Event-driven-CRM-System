@@ -18,7 +18,7 @@ export class EventsService {
     return await firstValueFrom(this.client.send({cmd: "events.microservice: findOne"}, {id}))
   }
 
-  async createOne(dto: CreateEventDto): Promise<EventDto> {
-    return await firstValueFrom(this.client.send({cmd: "events.microservice: createOne"}, {dto}))
+  async createOne(dto: CreateEventDto): Promise<void> {
+    this.client.emit({cmd: "events.microservice: createOne"}, {dto})
   }
 }

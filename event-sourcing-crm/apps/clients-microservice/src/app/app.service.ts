@@ -66,7 +66,7 @@ export class AppService {
   async createOne(dto: CreateClientDto): Promise<ClientEntity> {
     const client = await this.clientRepo.create(dto);
     await this.clientRepo.save(client);
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "created", actorId: dto.ownerId, subjectId: client.id })
+    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "created", actorId: dto.ownerId, subjectId: client.id })
     return client;
   }
 
@@ -76,7 +76,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "updated", actorId: dto.ownerId, subjectId: target.id })
+    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "updated", actorId: dto.ownerId, subjectId: target.id })
     await this.clientRepo.update(id, {name, email, phone, companyName, ownerId});
   }
 
@@ -85,7 +85,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "deleted", actorId: target.ownerId, subjectId: target.id })
+    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "deleted", actorId: target.ownerId, subjectId: target.id })
     await this.clientRepo.delete(id);
   }
 }

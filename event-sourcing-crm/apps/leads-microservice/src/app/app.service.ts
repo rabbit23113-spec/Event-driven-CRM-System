@@ -67,7 +67,7 @@ export class AppService {
   async createOne(dto: CreateLeadDto): Promise<LeadEntity> {
     const lead = await this.leadRepo.create(dto);
     await this.leadRepo.save(lead);
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "created", actorId: dto.ownerId, subjectId: lead.id })
+    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "created", actorId: dto.ownerId, subjectId: lead.id })
     return lead;
   }
 
@@ -77,7 +77,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "updated", actorId: dto.ownerId, subjectId: target.id })
+    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "updated", actorId: dto.ownerId, subjectId: target.id })
     await this.leadRepo.update(id, dto)
   }
 
@@ -87,8 +87,8 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "status_changed", actorId: "mock", subjectId: target.id })
-    await this.leadRepo.update(id, dto);
+    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "status_changed", actorId: "mock", subjectId: target.id })
+    await this.leadRepo.update(id, { status: dto.status });
   }
 
   async deleteOne(id: string): Promise<void> {
@@ -96,7 +96,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
-    this.eventsClient.send({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "deleted", actorId: target.ownerId, subjectId: target.id })
+    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "deleted", actorId: target.ownerId, subjectId: target.id })
     await this.leadRepo.delete(id);
   }
 }

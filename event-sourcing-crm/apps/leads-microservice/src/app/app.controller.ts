@@ -43,7 +43,7 @@ export class AppController {
 
   @EventPattern({cmd: "leads.microservice: updateStatus"})
   async updateStatus(@Payload() payload: { dto: UpdateStatusDto }): Promise<void> {
-    await this.appService.updateOne(payload.dto)
+    await this.appService.updateStatus(payload.dto)
   }
 
   @EventPattern({cmd: "leads.microservice: deleteOne"})
