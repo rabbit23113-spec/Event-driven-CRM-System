@@ -1,6 +1,7 @@
 import {Priority, Status} from "./task.dto";
 import {ApiProperty} from "@nestjs/swagger";
 import {IsDate, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID} from "class-validator";
+import {Type} from "class-transformer";
 
 
 export class UpdateTaskDto {
@@ -35,6 +36,7 @@ export class UpdateTaskDto {
 
   @ApiProperty({ required: false })
   @IsDate()
+  @Type(() => Date)
   @IsOptional()
   dueDate?: Date;
 

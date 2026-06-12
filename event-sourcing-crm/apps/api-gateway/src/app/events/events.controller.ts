@@ -1,9 +1,8 @@
-import {BadRequestException, Body, Controller, Get, Param, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, ParseUUIDPipe, Post} from '@nestjs/common';
 import {EventsService} from './events.service';
 import {EventDto} from "../dto/events/event.dto";
 import {CreateEventDto} from "../dto/events/create-event.dto";
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
-import {isUUID} from "class-validator";
 
 
 @Controller('events')
@@ -24,8 +23,7 @@ export class EventsController {
   })
   @ApiResponse({status: 200, type: EventDto})
   @Get("find/id/:id")
-  async findOne(@Param("id") id: string): Promise<EventDto> {
-    if (!isUUID(id)) throw new BadRequestException("Invalid UUID")
+  async findOne(@Param("id", new ParseUUIDPipe()) id: string): Promise<EventDto> {
     return await this.eventsService.findOne(id)
   }
 

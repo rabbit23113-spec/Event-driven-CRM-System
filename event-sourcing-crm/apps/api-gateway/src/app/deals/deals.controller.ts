@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, ParseEnumPipe, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, ParseEnumPipe, ParseUUIDPipe, Patch, Post} from '@nestjs/common';
 import { DealsService } from './deals.service';
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {DealDto, Status} from "../dto/deals/deal.dto";
@@ -20,7 +20,7 @@ export class DealsController {
   @ApiResponse({status: 200, type: DealDto})
   @ApiParam({name: 'id'})
   @Get("find/id/:id")
-  async findOne(@Param('id') id: string): Promise<DealDto> {
+  async findOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<DealDto> {
     return await this.dealsService.findOne(id);
   }
 
@@ -49,7 +49,7 @@ export class DealsController {
   @ApiOperation({summary: "Delete deal" })
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param('id') id: string): Promise<void> {
+  async deleteOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return await this.dealsService.deleteOne(id)
   }
 }

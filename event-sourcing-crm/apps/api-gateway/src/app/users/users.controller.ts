@@ -1,11 +1,10 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Param,
-  ParseEnumPipe,
+  ParseEnumPipe, ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -14,7 +13,7 @@ import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {UserDto} from "../dto/users/user.dto";
 import {CreateUserDto, Role} from "../dto/users/create-user.dto";
 import {UpdateUserDto} from "../dto/users/update-user.dto";
-import {isEmail, isUUID} from "class-validator";
+import {FindByEmailDto} from "../dto/users/find-by-email.dto";
 
 @Controller('users')
 export class UsersController {
@@ -32,7 +31,7 @@ export class UsersController {
   @ApiParam({name: "id"})
   @ApiResponse({status: 200, type: UserDto})
   @Get("find/id/:id")
-  async findOne(@Param("id") id: string): Promise<UserDto> {
+  async findOne(@Param("id", new ParseUUIDPipe()) id: string): Promise<UserDto> {
     return await this.usersService.findOne(id);
   }
 
@@ -45,12 +44,10 @@ export class UsersController {
   }
 
   @ApiOperation({summary: "Get user by email"})
-  @ApiParam({name: "email"})
   @ApiResponse({status: 200, type: UserDto})
-  @Get("find/email/:email")
-  async findOneByEmail(@Param("email") email: string): Promise<UserDto> {
-    if (!isEmail(email)) throw new BadRequestException("Invalid email");
-    return await this.usersService.findOneByEmail(email);
+  @Get("find/email")
+  async findOneByEmail(@Body("email") dto: FindByEmailDto): Promise<UserDto> {
+    return await this.usersService.findOneByEmail(dto.email);
   }
 
   @ApiOperation({summary: "Create user"})
@@ -70,8 +67,7 @@ export class UsersController {
   @ApiOperation({summary: "Delete user"})
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param("id") id: string): Promise<void> {
-    if (!isUUID(id)) throw new BadRequestException("Invalid UUID");
+  async deleteOne(@Param("id", new ParseUUIDPipe()) id: string): Promise<void> {
     await this.usersService.deleteUser(id);
   }
 }

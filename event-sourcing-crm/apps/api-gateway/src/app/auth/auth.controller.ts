@@ -58,7 +58,7 @@ export class AuthController {
 
   @ApiOperation({summary: "Log out"})
   @ApiResponse({status: 201, type: AccessTokenDto})
-  @Delete("refresh")
+  @Delete("logout")
   async logOut(@Body() body: BodyAccessTokenDto): Promise<void> {
     return await this.authService.logOut(body.accessToken);
   }

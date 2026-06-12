@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, ParseEnumPipe, ParseUUIDPipe, Patch, Post} from '@nestjs/common';
 import {LeadsService} from './leads.service';
 import {LeadDto, Status} from "../dto/leads/lead.dto";
 import {CreateLeadDto} from "../dto/leads/create-lead.dto";
@@ -21,7 +21,7 @@ export class LeadsController {
   @ApiResponse({status: 200, type: LeadDto})
   @ApiParam({name: 'id'})
   @Get("find/id/:id")
-  async findOne(@Param('id') id: string): Promise<LeadDto> {
+  async findOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<LeadDto> {
     return await this.leadsService.findOne(id);
   }
 
@@ -29,7 +29,7 @@ export class LeadsController {
   @ApiResponse({status: 200, type: LeadDto, isArray: true})
   @ApiParam({name: 'status', enum: Status})
   @Get("find/status/:status")
-  async findStatus(@Param('status') status: Status): Promise<LeadDto[]> {
+  async findStatus(@Param('status', new ParseEnumPipe(Status)) status: Status): Promise<LeadDto[]> {
     return await this.leadsService.findByStatus(status)
   }
 
@@ -58,7 +58,7 @@ export class LeadsController {
   @ApiOperation({summary: "Delete lead" })
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param('id') id: string): Promise<void> {
+  async deleteOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
     return await this.leadsService.deleteOne(id)
   }
 }
