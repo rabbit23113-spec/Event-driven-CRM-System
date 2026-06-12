@@ -62,12 +62,12 @@ export class AppService {
   }
 
   async createOne(dto: CreateAuthSessionDto): Promise<AuthSessionEntity> {
-    const monthInMilliseconds = 1000 * 60 * 60 * 24 * 30;
-    const expiresIn = Date.now() + monthInMilliseconds
+    const MonthInSeconds = 60 * 60 * 24 * 30;
+    const expiresIn = Date.now() + MonthInSeconds
     const refreshToken = this.jwtService.sign({sub: dto.userId}, {expiresIn});
     const salt = await bcrypt.genSalt(12)
     const refreshTokenHash = await bcrypt.hash(refreshToken, salt)
-    const authSession = await this.authSessionRepo.create({...dto, expiresAt: new Date(expiresAt), refreshTokenHash})
+    const authSession = await this.authSessionRepo.create({...dto, expiresAt: new Date(expiresIn), refreshTokenHash})
     await this.authSessionRepo.save(authSession);
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "auth",
@@ -91,8 +91,8 @@ export class AppService {
       await this.authSessionRepo.delete(authSession.id)
       throw new UnauthorizedException("Auth session is expired");
     }
-    const thirtyMinutesInMilliseconds = 1000 * 60 * 30;
-    const expiresIn = Date.now() + thirtyMinutesInMilliseconds;
+    const thirtyMinutesInSeconds = 60 * 30;
+    const expiresIn = Date.now() + thirtyMinutesInSeconds;
     const accessToken = this.jwtService.sign({sub: userId}, {expiresIn});
     return {accessToken};
   }
