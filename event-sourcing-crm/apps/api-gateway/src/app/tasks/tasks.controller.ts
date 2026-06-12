@@ -18,6 +18,7 @@ import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {UpdateStatusDto} from "../dto/tasks/update-status.dto";
 import {CurrentUser} from "../decorators/current-user.decorator";
 import {JwtGuard} from "../guards/jwt/jwt.guard";
+import {HighPermissionsGuard} from "../guards/high-permissions/high-permissions.guard";
 
 @Controller('tasks')
 export class TasksController {

@@ -61,11 +61,11 @@ export class AppService {
     return target;
   }
 
-  async createOne(dto: CreateAuthSessionDto): Promise<AuthSessionEntity> {
+  async createOne(dto: CreateAuthSessionDto, role: string): Promise<AuthSessionEntity> {
     const MonthInSeconds = 60 * 60 * 24 * 30;
     const currentDateInSeconds = new Date().getSeconds()
     const expiresIn = currentDateInSeconds + MonthInSeconds
-    const refreshToken = this.jwtService.sign({sub: dto.userId}, {expiresIn});
+    const refreshToken = this.jwtService.sign({sub: dto.userId, role}, {expiresIn});
     const salt = await bcrypt.genSalt(12)
     const refreshTokenHash = await bcrypt.hash(refreshToken, salt)
     const existedAuthSession: AuthSessionEntity | null = await this.authSessionRepo.findOneBy({userId: dto.userId})
@@ -85,10 +85,10 @@ export class AppService {
 
   async refreshAccessToken(accessToken: string): Promise<AccessTokenDto> {
     const payload = this.jwtService.verify(accessToken);
-    return await this.generateAccessToken(payload.sub)
+    return await this.generateAccessToken(payload.sub, payload.role)
   }
 
-  async generateAccessToken(userId: string): Promise<AccessTokenDto> {
+  async generateAccessToken(userId: string, role: string): Promise<AccessTokenDto> {
     const authSession = await this.findByUserId(userId);
     if (!authSession) {
       throw new UnauthorizedException(`Auth session with user id: ${userId} not found`);
@@ -100,14 +100,15 @@ export class AppService {
     }
     const thirtyMinutesInSeconds = 60 * 30;
     const expiresIn = currentDateInSeconds + thirtyMinutesInSeconds;
-    const accessToken = this.jwtService.sign({sub: userId}, {expiresIn});
+    const accessToken = this.jwtService.sign({sub: userId, role}, {expiresIn});
     return {accessToken};
   }
 
   async signUp(dto: SignUpDto, ip: string): Promise<AccessTokenDto> {
     const user: UserDto = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: createUser"}, {dto}))
-    await this.createOne({userId: user.id, ip})
-    return await this.generateAccessToken(user.id)
+    const { id, role } = user;
+    await this.createOne({userId: id, ip}, role)
+    return await this.generateAccessToken(id, role)
   }
 
   async signIn(dto: SignInDto, ip: string): Promise<AccessTokenDto> {
@@ -116,8 +117,9 @@ export class AppService {
     if (!isMatch) {
       throw new UnauthorizedException("Incorrect email or password");
     }
-    await this.createOne({userId: user.id, ip})
-    return await this.generateAccessToken(user.id)
+
+    await this.createOne({userId: user.id, ip}, user.role)
+    return await this.generateAccessToken(user.id, user.role)
   }
 
   async logout(accessToken: string): Promise<void> {
