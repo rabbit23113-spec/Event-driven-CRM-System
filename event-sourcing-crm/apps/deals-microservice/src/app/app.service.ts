@@ -8,6 +8,7 @@ import {CreateDealDto} from "./dto/create-deal.dto";
 import {UpdateDealDto} from "./dto/update-deal.dto";
 import type {Cache} from "cache-manager";
 import {CACHE_MANAGER} from "@nestjs/cache-manager";
+import {UpdateStatusDto} from "./dto/update-status.dto";
 
 @Injectable()
 export class AppService {
@@ -70,6 +71,21 @@ export class AppService {
       subjectId: target.id
     })
     await this.dealRepo.update(id, {title, value, status, clientId, ownerId});
+  }
+
+  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+    const {id} = dto;
+    const target = await this.findOne(id)
+    if (!target) {
+      throw new NotFoundException(`DealEntity with id ${id} not found`);
+    }
+    await this.dealRepo.update(id, dto)
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
+      domain: "deal",
+      action: "status_changed",
+      actorId: "mock",
+      subjectId: target.id
+    })
   }
 
   async deleteOne(id: string): Promise<void> {

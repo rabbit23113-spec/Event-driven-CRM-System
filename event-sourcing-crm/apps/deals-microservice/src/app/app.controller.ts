@@ -4,6 +4,7 @@ import {EventPattern, MessagePattern, Payload} from "@nestjs/microservices";
 import {DealEntity, Status} from "./entities/deal.entity";
 import {UpdateDealDto} from "./dto/update-deal.dto";
 import {CreateDealDto} from "./dto/create-deal.dto";
+import {UpdateStatusDto} from "./dto/update-status.dto";
 
 @Controller()
 export class AppController {
@@ -38,6 +39,11 @@ export class AppController {
   @EventPattern({cmd: "deals.microservice: updateOne"})
   async updateOne(@Payload() payload: { dto: UpdateDealDto }): Promise<void> {
     await this.appService.updateOne(payload.dto)
+  }
+
+  @EventPattern({cmd: "deals.microservice: updateStatus"})
+  async updateStatus(@Payload() payload: { dto: UpdateStatusDto }): Promise<void> {
+    await this.appService.updateStatus(payload.dto)
   }
 
   @EventPattern({cmd: "deals.microservice: deleteOne"})

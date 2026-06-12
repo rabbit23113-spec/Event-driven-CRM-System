@@ -5,6 +5,7 @@ import {firstValueFrom} from "rxjs";
 import {CreateDealDto} from "../dto/deals/create-deal.dto";
 import {DealDto, Status} from "../dto/deals/deal.dto";
 import {UpdateDealDto} from "../dto/deals/update-deal.dto";
+import {UpdateStatusDto} from "../dto/deals/update-status.dto";
 
 @Injectable()
 export class DealsService {
@@ -29,6 +30,10 @@ export class DealsService {
 
   async updateOne(dto: UpdateDealDto): Promise<void> {
     return await firstValueFrom(this.client.emit({cmd: "deals.microservice: updateOne"}, {dto}))
+  }
+
+  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+    return await firstValueFrom(this.client.emit({cmd: "deals.microservice: updateStatus"}, {dto}))
   }
 
   async deleteOne(id: string): Promise<void> {

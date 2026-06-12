@@ -4,6 +4,7 @@ import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {DealDto, Status} from "../dto/deals/deal.dto";
 import {CreateDealDto} from "../dto/deals/create-deal.dto";
 import {UpdateDealDto} from "../dto/deals/update-deal.dto";
+import {UpdateStatusDto} from "../dto/deals/update-status.dto";
 
 @Controller('deals')
 export class DealsController {
@@ -42,8 +43,15 @@ export class DealsController {
   @ApiOperation({summary: "Update deal" })
   @ApiResponse({status: 204})
   @Patch("update")
-  async updateOne(@Body() updateDealDto: UpdateDealDto): Promise<void> {
-    return await this.dealsService.updateOne(updateDealDto)
+  async updateOne(@Body() dto: UpdateDealDto): Promise<void> {
+    return await this.dealsService.updateOne(dto)
+  }
+
+  @ApiOperation({summary: "Update deal by status" })
+  @ApiResponse({status: 204})
+  @Patch("update/status")
+  async updateOne(@Body() dto: UpdateStatusDto): Promise<void> {
+    return await this.dealsService.updateOne(dto)
   }
 
   @ApiOperation({summary: "Delete deal" })
