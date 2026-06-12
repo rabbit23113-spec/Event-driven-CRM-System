@@ -80,7 +80,8 @@ export class TasksController {
     return await this.tasksService.findByStatus(status);
   }
 
-  @UseGuards(JwtGuard, HighPermissionsGuard)
+  @UseGuards(JwtGuard)
+  @UseGuards(HighPermissionsGuard)
   @ApiOperation({summary: "Create task"})
   @ApiResponse({status: 201, type: TaskDto})
   @Post("create")

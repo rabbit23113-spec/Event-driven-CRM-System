@@ -28,12 +28,12 @@ export class AuthService {
     return await firstValueFrom(this.client.send({cmd: "auth.microservice: refreshAccessToken"}, {accessToken}))
   }
 
-  async signUp(dto: SignUpDto, ip: string): Promise<AccessTokenDto> {
-    return await firstValueFrom(this.client.send({cmd: "auth.microservice: signUp"}, {dto, ip}))
+  async signUp(dto: SignUpDto): Promise<AccessTokenDto> {
+    return await firstValueFrom(this.client.send({cmd: "auth.microservice: signUp"}, {dto}))
   }
 
-  async signIn(dto: SignInDto, ip: string): Promise<AccessTokenDto> {
-    return await firstValueFrom(this.client.send({cmd: "auth.microservice: signIn"}, {dto, ip}))
+  async signIn(dto: SignInDto): Promise<AccessTokenDto> {
+    return await firstValueFrom(this.client.send({cmd: "auth.microservice: signIn"}, {dto}))
   }
 
   async logOut(accessToken: string): Promise<void> {

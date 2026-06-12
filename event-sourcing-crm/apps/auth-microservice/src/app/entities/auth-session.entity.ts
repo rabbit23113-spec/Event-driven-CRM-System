@@ -11,11 +11,8 @@ export class AuthSessionEntity {
   @Column({name: "refresh_token_hash"})
   refreshTokenHash: string;
 
-  @Column({name: "expires_at", type: "date"})
+  @Column({name: "expires_at", type: "timestamptz"})
   expiresAt: Date;
-
-  @Column()
-  ip: string;
 
   @CreateDateColumn({name: "created_at"})
   createdAt: Date;

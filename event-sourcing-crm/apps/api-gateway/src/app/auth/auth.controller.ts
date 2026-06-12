@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Ip, Param, ParseUUIDPipe, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post} from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {AuthSessionDto} from "../dto/auth/auth-session.dto";
 import {AccessTokenDto} from "../dto/auth/access-token.dto";
@@ -45,15 +45,15 @@ export class AuthController {
   @ApiOperation({summary: "Sign up"})
   @ApiResponse({status: 201, type: AccessTokenDto})
   @Post("signup")
-  async signUp(@Body() dto: SignUpDto, @Ip() ip: string): Promise<AccessTokenDto> {
-    return await this.authService.signUp(dto, ip);
+  async signUp(@Body() dto: SignUpDto): Promise<AccessTokenDto> {
+    return await this.authService.signUp(dto);
   }
 
   @ApiOperation({summary: "Sign in"})
   @ApiResponse({status: 201, type: AccessTokenDto})
   @Post("signin")
-  async signIn(@Body() dto: SignInDto, @Ip() ip: string): Promise<AccessTokenDto> {
-    return await this.authService.signIn(dto, ip);
+  async signIn(@Body() dto: SignInDto): Promise<AccessTokenDto> {
+    return await this.authService.signIn(dto);
   }
 
   @ApiOperation({summary: "Log out"})

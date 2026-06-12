@@ -14,9 +14,6 @@ export class AuthSessionDto {
   expiresAt: Date;
 
   @ApiProperty()
-  ip: string;
-
-  @ApiProperty()
   createdAt: Date;
 
   @ApiProperty()
