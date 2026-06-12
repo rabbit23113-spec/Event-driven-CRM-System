@@ -2,7 +2,9 @@
   "name": "@event-sourcing-crm/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "setup": "node scripts/setup.js"
+  },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^11.0.0",
