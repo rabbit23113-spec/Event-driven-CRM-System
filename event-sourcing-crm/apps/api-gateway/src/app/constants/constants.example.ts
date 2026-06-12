@@ -27,4 +27,6 @@ export const RMQ_TASKS_QUEUE = "crm_tasks_queue";
 export const RMQ_AUTH_CLIENT_ID = "crm_rabbitmq_auth_client_id";
 export const RMQ_AUTH_QUEUE = "crm_auth_queue";
 
+export const JWT_SECRET = "crm_secret";
+
 export const PORT=13050

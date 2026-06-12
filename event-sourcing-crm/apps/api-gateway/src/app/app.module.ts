@@ -9,9 +9,16 @@ import { DealsModule } from './deals/deals.module';
 import { NotesModule } from './notes/notes.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AuthModule } from './auth/auth.module';
+import {JwtModule} from "@nestjs/jwt";
+import * as constants from "./constants/constants";
 
 @Module({
-  imports: [EventsModule, UsersModule, LeadsModule, ClientsModule, DealsModule, NotesModule, TasksModule, AuthModule],
+  imports: [EventsModule, UsersModule, LeadsModule, ClientsModule, DealsModule, NotesModule, TasksModule, AuthModule,
+    JwtModule.register({
+      global: true,
+      secret: constants.JWT_SECRET,
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
