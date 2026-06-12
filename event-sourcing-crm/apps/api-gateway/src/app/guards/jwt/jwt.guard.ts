@@ -22,7 +22,7 @@ export class JwtGuard implements CanActivate {
         secret: constants.JWT_SECRET,
       });
 
-      req.user = payload.sub;
+      req.user = payload;
       return true;
     } catch {
       throw new UnauthorizedException('Invalid token');
