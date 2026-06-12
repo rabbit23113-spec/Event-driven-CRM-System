@@ -67,7 +67,7 @@ export class AppService {
     return users;
   }
 
-  async createUser(dto: CreateUserDto): Promise<UserEntity> {
+  async createUser(dto: CreateUserDto, actorId: string): Promise<UserEntity> {
     const salt = 12;
     const passwordHash = await bcrypt.hash(dto.password, salt);
     const user = this.usersRepo.create({...dto, passwordHash});
@@ -75,12 +75,13 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "user",
       action: "created",
-      subjectId: user.id
+      subjectId: user.id,
+      actorId
     });
     return user
   }
 
-  async updateUser(dto: UpdateUserDto): Promise<void> {
+  async updateUser(dto: UpdateUserDto, actorId: string): Promise<void> {
     const {id, email, firstName, lastName} = dto;
     const target = await this.findOne(id)
     if (!target) {
@@ -89,12 +90,13 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "user",
       action: "updated",
-      subjectId: target.id
+      subjectId: target.id,
+      actorId
     })
     await this.usersRepo.update(id, {email, firstName, lastName});
   }
 
-  async deleteUser(id: string): Promise<void> {
+  async deleteUser(id: string, actorId: string): Promise<void> {
     const target = await this.findOne(id);
     if (!target) {
       throw new NotFoundException(`Cannot find user with id ${id}`);
@@ -102,7 +104,8 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "user",
       action: "deleted",
-      subjectId: target.id
+      subjectId: target.id,
+      actorId
     })
     await this.usersRepo.delete(id);
   }

@@ -1,10 +1,23 @@
-import {Body, Controller, Delete, Get, Param, ParseEnumPipe, ParseUUIDPipe, Patch, Post} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseEnumPipe,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import {LeadsService} from './leads.service';
 import {LeadDto, Status} from "../dto/leads/lead.dto";
 import {CreateLeadDto} from "../dto/leads/create-lead.dto";
 import {UpdateLeadDto} from "../dto/leads/update-lead.dto";
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {UpdateStatusDto} from "../dto/leads/update-status.dto";
+import {JwtGuard} from "../guards/jwt/jwt.guard";
+import {CurrentUser} from "../decorators/current-user.decorator";
 
 @Controller('leads')
 export class LeadsController {
@@ -42,31 +55,35 @@ export class LeadsController {
     return await this.leadsService.findOneByName(name);
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Create lead" })
   @ApiResponse({status: 201, type: LeadDto})
   @Post("create")
-  async create(@Body() createLeadDto: CreateLeadDto): Promise<LeadDto> {
-    return await this.leadsService.createOne(createLeadDto)
+  async create(@Body() createLeadDto: CreateLeadDto, @CurrentUser() actorId: string): Promise<LeadDto> {
+    return await this.leadsService.createOne(createLeadDto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update lead" })
   @ApiResponse({status: 204})
   @Patch("update")
-  async updateOne(@Body() dto: UpdateLeadDto): Promise<void> {
-    return await this.leadsService.updateOne(dto)
+  async updateOne(@Body() dto: UpdateLeadDto, @CurrentUser() actorId: string): Promise<void> {
+    return await this.leadsService.updateOne(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update lead by status" })
   @ApiResponse({status: 204})
   @Patch("update/status")
-  async updateStatus(@Body() dto: UpdateStatusDto): Promise<void> {
-    return await this.leadsService.updateStatus(dto)
+  async updateStatus(@Body() dto: UpdateStatusDto, @CurrentUser() actorId: string): Promise<void> {
+    return await this.leadsService.updateStatus(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Delete lead" })
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
-    return await this.leadsService.deleteOne(id)
+  async deleteOne(@Param('id', new ParseUUIDPipe()) id: string, @CurrentUser() actorId: string): Promise<void> {
+    return await this.leadsService.deleteOne(id, actorId)
   }
 }

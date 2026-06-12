@@ -24,19 +24,19 @@ export class DealsService {
     return await firstValueFrom(this.client.send({cmd: "deals.microservice: findByStatus"}, {status}))
   }
 
-  async createOne(dto: CreateDealDto): Promise<DealDto> {
-    return await firstValueFrom(this.client.send({cmd: "deals.microservice: createOne"}, {dto}))
+  async createOne(dto: CreateDealDto, actorId: string): Promise<DealDto> {
+    return await firstValueFrom(this.client.send({cmd: "deals.microservice: createOne"}, {dto, actorId}))
   }
 
-  async updateOne(dto: UpdateDealDto): Promise<void> {
-    this.client.emit({cmd: "deals.microservice: updateOne"}, {dto})
+  async updateOne(dto: UpdateDealDto, actorId: string): Promise<void> {
+    this.client.emit({cmd: "deals.microservice: updateOne"}, {dto, actorId})
   }
 
-  async updateStatus(dto: UpdateStatusDto): Promise<void> {
-    this.client.emit({cmd: "deals.microservice: updateStatus"}, {dto})
+  async updateStatus(dto: UpdateStatusDto, actorId: string): Promise<void> {
+    this.client.emit({cmd: "deals.microservice: updateStatus"}, {dto, actorId})
   }
 
-  async deleteOne(id: string): Promise<void> {
-    this.client.emit({cmd: "deals.microservice: deleteOne"}, {id})
+  async deleteOne(id: string, actorId: string): Promise<void> {
+    this.client.emit({cmd: "deals.microservice: deleteOne"}, {id, actorId})
   }
 }

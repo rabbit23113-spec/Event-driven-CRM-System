@@ -10,48 +10,48 @@ export class AppController {
   constructor(private readonly appService: AppService) {
   }
 
-  @MessagePattern({ cmd: "notes.microservice: findAll" })
+  @MessagePattern({cmd: "notes.microservice: findAll"})
   async findAll(): Promise<NoteEntity[]> {
     return await this.appService.findAll();
   }
 
-  @MessagePattern({ cmd: "notes.microservice: findOne" })
+  @MessagePattern({cmd: "notes.microservice: findOne"})
   async findOne(@Payload() payload: { id: string }): Promise<NoteEntity> {
     return await this.appService.findOne(payload.id);
   }
 
-  @MessagePattern({ cmd: "notes.microservice: findByAuthorId" })
+  @MessagePattern({cmd: "notes.microservice: findByAuthorId"})
   async findByAuthorId(@Payload() payload: { authorId: string }): Promise<NoteEntity[]> {
     return await this.appService.findByAuthorId(payload.authorId);
   }
 
-  @MessagePattern({ cmd: "notes.microservice: findByClientId" })
+  @MessagePattern({cmd: "notes.microservice: findByClientId"})
   async findByClientId(@Payload() payload: { clientId: string }): Promise<NoteEntity[]> {
     return await this.appService.findByClientId(payload.clientId);
   }
 
-  @MessagePattern({ cmd: "notes.microservice: findByLeadId" })
+  @MessagePattern({cmd: "notes.microservice: findByLeadId"})
   async findByLeadId(@Payload() payload: { leadId: string }): Promise<NoteEntity[]> {
     return await this.appService.findByLeadId(payload.leadId);
   }
 
-  @MessagePattern({ cmd: "notes.microservice: findByDealId" })
+  @MessagePattern({cmd: "notes.microservice: findByDealId"})
   async findByDealId(@Payload() payload: { dealId: string }): Promise<NoteEntity[]> {
     return await this.appService.findByDealId(payload.dealId);
   }
 
-  @MessagePattern({ cmd: "notes.microservice: createOne" })
-  async createOne(@Payload() payload: { dto: CreateNoteDto}): Promise<NoteEntity> {
-    return await this.appService.createOne(payload.dto);
+  @MessagePattern({cmd: "notes.microservice: createOne"})
+  async createOne(@Payload() payload: { dto: CreateNoteDto, actorId: string }): Promise<NoteEntity> {
+    return await this.appService.createOne(payload.dto, payload.actorId);
   }
 
-  @EventPattern({ cmd: "notes.microservice: updateOne" })
-  async updateOne(@Payload() payload: {dto: UpdateNoteDto}): Promise<void> {
-    return await this.appService.updateOne(payload.dto);
+  @EventPattern({cmd: "notes.microservice: updateOne"})
+  async updateOne(@Payload() payload: { dto: UpdateNoteDto, actorId: string }): Promise<void> {
+    return await this.appService.updateOne(payload.dto, payload.actorId);
   }
 
-  @EventPattern({ cmd: "notes.microservice: deleteOne" })
-  async deleteOne(@Payload() payload: {id: string}): Promise<void> {
-    return await this.appService.deleteOne(payload.id);
+  @EventPattern({cmd: "notes.microservice: deleteOne"})
+  async deleteOne(@Payload() payload: { id: string, actorId: string }): Promise<void> {
+    return await this.appService.deleteOne(payload.id, payload.actorId);
   }
 }

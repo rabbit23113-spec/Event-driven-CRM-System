@@ -35,9 +35,9 @@ export class AuthController {
     return await this.authService.findByUserId(userId);
   }
 
-  @ApiOperation({summary: "Refresh access token"})
+  @ApiOperation({summary: "Get new access token"})
   @ApiResponse({status: 201, type: AccessTokenDto})
-  @Post("refresh")
+  @Post("access")
   async refreshAccessToken(@Body() body: BodyAccessTokenDto): Promise<AccessTokenDto> {
     return await this.authService.refreshAccessToken(body.accessToken);
   }

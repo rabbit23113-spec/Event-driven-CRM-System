@@ -1,10 +1,23 @@
-import {Body, Controller, Delete, Get, Param, ParseEnumPipe, ParseUUIDPipe, Patch, Post} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseEnumPipe,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import {TasksService} from './tasks.service';
 import {Priority, Status, TaskDto} from "../dto/tasks/task.dto";
 import {CreateTaskDto} from "../dto/tasks/create-task.dto";
 import {UpdateTaskDto} from "../dto/tasks/update-task.dto";
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {UpdateStatusDto} from "../dto/tasks/update-status.dto";
+import {CurrentUser} from "../decorators/current-user.decorator";
+import {JwtGuard} from "../guards/jwt/jwt.guard";
 
 @Controller('tasks')
 export class TasksController {
@@ -66,31 +79,35 @@ export class TasksController {
     return await this.tasksService.findByStatus(status);
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Create task"})
   @ApiResponse({status: 201, type: TaskDto})
   @Post("create")
-  async createOne(@Body() dto: CreateTaskDto): Promise<TaskDto> {
-    return await this.tasksService.createOne(dto)
+  async createOne(@Body() dto: CreateTaskDto, @CurrentUser() actorId: string): Promise<TaskDto> {
+    return await this.tasksService.createOne(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update task"})
   @ApiResponse({status: 204})
   @Patch("update")
-  async updateOne(@Body() dto: UpdateTaskDto): Promise<void> {
-    return await this.tasksService.updateOne(dto)
+  async updateOne(@Body() dto: UpdateTaskDto, @CurrentUser() actorId: string): Promise<void> {
+    return await this.tasksService.updateOne(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update task by status"})
   @ApiResponse({status: 204})
   @Patch("update/status")
-  async updateStatus(@Body() dto: UpdateStatusDto): Promise<void> {
-    return await this.tasksService.updateStatus(dto)
+  async updateStatus(@Body() dto: UpdateStatusDto, @CurrentUser() actorId: string): Promise<void> {
+    return await this.tasksService.updateStatus(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Delete task"})
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param("id", new ParseUUIDPipe()) id: string): Promise<void> {
-    return await this.tasksService.deleteOne(id)
+  async deleteOne(@Param("id", new ParseUUIDPipe()) id: string, @CurrentUser() actorId: string): Promise<void> {
+    return await this.tasksService.deleteOne(id, actorId)
   }
 }

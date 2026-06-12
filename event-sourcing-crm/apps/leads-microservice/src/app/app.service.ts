@@ -15,7 +15,7 @@ export class AppService {
   constructor(@InjectRepository(LeadEntity) private readonly leadRepo: Repository<LeadEntity>,
               @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
               @Inject(CACHE_MANAGER) private readonly cache: Cache
-              ) {
+  ) {
   }
 
   async findAll(): Promise<LeadEntity[]> {
@@ -64,39 +64,59 @@ export class AppService {
     return target;
   }
 
-  async createOne(dto: CreateLeadDto): Promise<LeadEntity> {
+  async createOne(dto: CreateLeadDto, actorId: string): Promise<LeadEntity> {
     const lead = await this.leadRepo.create(dto);
     await this.leadRepo.save(lead);
-    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "created", actorId: dto.ownerId, subjectId: lead.id })
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+      domain: "lead",
+      action: "created",
+      actorId,
+      subjectId: lead.id
+    })
     return lead;
   }
 
-  async updateOne(dto: UpdateLeadDto): Promise<void> {
+  async updateOne(dto: UpdateLeadDto, actorId: string): Promise<void> {
     const {id} = dto;
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "updated", actorId: dto.ownerId, subjectId: target.id })
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+      domain: "lead",
+      action: "updated",
+      actorId,
+      subjectId: target.id
+    })
     await this.leadRepo.update(id, dto)
   }
 
-  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+  async updateStatus(dto: UpdateStatusDto, actorId: string): Promise<void> {
     const {id} = dto;
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "status_changed", actorId: "mock", subjectId: target.id })
-    await this.leadRepo.update(id, { status: dto.status });
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+      domain: "lead",
+      action: "status_changed",
+      actorId,
+      subjectId: target.id
+    })
+    await this.leadRepo.update(id, {status: dto.status});
   }
 
-  async deleteOne(id: string): Promise<void> {
+  async deleteOne(id: string, actorId: string): Promise<void> {
     const target = await this.findOne(id);
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "lead", action: "deleted", actorId: target.ownerId, subjectId: target.id })
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+      domain: "lead",
+      action: "deleted",
+      actorId,
+      subjectId: target.id
+    })
     await this.leadRepo.delete(id);
   }
 }

@@ -30,17 +30,17 @@ export class AppController {
   }
 
   @MessagePattern({ cmd: "users.microservice: createUser" })
-  async createUser(@Payload() payload: { dto: CreateUserDto }) {
-    return await this.appService.createUser(payload.dto)
+  async createUser(@Payload() payload: { dto: CreateUserDto, actorId: string }) {
+    return await this.appService.createUser(payload.dto, payload.actorId);
   }
 
   @EventPattern({ cmd: "users.microservice: updateOne" })
-  async updateOne(@Payload() payload: { dto: UpdateUserDto }) {
-    return await this.appService.updateUser(payload.dto)
+  async updateOne(@Payload() payload: { dto: UpdateUserDto, actorId: string }) {
+    return await this.appService.updateUser(payload.dto, payload.actorId)
   }
 
   @EventPattern({ cmd: "users.microservice: deleteOne" })
-  async deleteOne(@Payload() payload: { id: string }) {
-    return await this.appService.deleteUser(payload.id);
+  async deleteOne(@Payload() payload: { id: string, actorId: string }) {
+    return await this.appService.deleteUser(payload.id, payload.actorId);
   }
 }

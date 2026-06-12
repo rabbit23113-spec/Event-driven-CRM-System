@@ -46,19 +46,19 @@ export class AppService {
     return result;
   }
 
-  async createOne(dto: CreateDealDto): Promise<DealEntity> {
+  async createOne(dto: CreateDealDto, actorId: string): Promise<DealEntity> {
     const deal = await this.dealRepo.create(dto);
     await this.dealRepo.save(deal);
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "deal",
       action: "created",
-      actorId: dto.ownerId,
+      actorId,
       subjectId: deal.id
     })
     return deal;
   }
 
-  async updateOne(dto: UpdateDealDto): Promise<void> {
+  async updateOne(dto: UpdateDealDto, actorId: string): Promise<void> {
     const {id, title, value, status, clientId, ownerId} = dto;
     const target = await this.findOne(id)
     if (!target) {
@@ -67,13 +67,13 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "deal",
       action: "updated",
-      actorId: dto.ownerId,
+      actorId,
       subjectId: target.id
     })
     await this.dealRepo.update(id, {title, value, status, clientId, ownerId});
   }
 
-  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+  async updateStatus(dto: UpdateStatusDto, actorId: string): Promise<void> {
     const {id} = dto;
     const target = await this.findOne(id)
     if (!target) {
@@ -83,12 +83,12 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "deal",
       action: "status_changed",
-      actorId: "mock",
+      actorId,
       subjectId: target.id
     })
   }
 
-  async deleteOne(id: string): Promise<void> {
+  async deleteOne(id: string, actorId: string): Promise<void> {
     const target = await this.findOne(id);
     if (!target) {
       throw new NotFoundException(`DealEntity with id ${id} not found`);
@@ -96,7 +96,7 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "deal",
       action: "deleted",
-      actorId: target.ownerId,
+      actorId,
       subjectId: target.id
     })
     await this.dealRepo.delete(id);

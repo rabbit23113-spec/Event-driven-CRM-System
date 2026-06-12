@@ -14,7 +14,7 @@ export class AppService {
   constructor(@InjectRepository(ClientEntity) private readonly clientRepo: Repository<ClientEntity>,
               @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
               @Inject(CACHE_MANAGER) private readonly cache: Cache
-              ) {
+  ) {
   }
 
   async findAll(): Promise<ClientEntity[]> {
@@ -63,29 +63,44 @@ export class AppService {
     return target;
   }
 
-  async createOne(dto: CreateClientDto): Promise<ClientEntity> {
+  async createOne(dto: CreateClientDto, actorId: string): Promise<ClientEntity> {
     const client = await this.clientRepo.create(dto);
     await this.clientRepo.save(client);
-    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "created", actorId: dto.ownerId, subjectId: client.id })
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+      domain: "client",
+      action: "created",
+      actorId,
+      subjectId: client.id
+    })
     return client;
   }
 
-  async updateOne(dto: UpdateClientDto): Promise<void> {
+  async updateOne(dto: UpdateClientDto, actorId: string): Promise<void> {
     const {id, name, email, phone, companyName, ownerId} = dto;
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "updated", actorId: dto.ownerId, subjectId: target.id })
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+      domain: "client",
+      action: "updated",
+      actorId,
+      subjectId: target.id
+    })
     await this.clientRepo.update(id, {name, email, phone, companyName, ownerId});
   }
 
-  async deleteOne(id: string): Promise<void> {
+  async deleteOne(id: string, actorId: string): Promise<void> {
     const target = await this.findOne(id);
     if (!target) {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({ cmd: 'events.microservice: createOne' }, { domain: "client", action: "deleted", actorId: target.ownerId, subjectId: target.id })
+    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+      domain: "client",
+      action: "deleted",
+      actorId,
+      subjectId: target.id
+    })
     await this.clientRepo.delete(id);
   }
 }

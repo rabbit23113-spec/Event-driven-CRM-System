@@ -35,15 +35,15 @@ export class NotesService {
     return await firstValueFrom(this.client.send({cmd: "notes.microservice: findByDealId"}, {dealId}))
   }
 
-  async createOne(dto: CreateNoteDto): Promise<NoteDto> {
-    return await firstValueFrom(this.client.send({cmd: "notes.microservice: createOne"}, {dto}))
+  async createOne(dto: CreateNoteDto, actorId: string): Promise<NoteDto> {
+    return await firstValueFrom(this.client.send({cmd: "notes.microservice: createOne"}, {dto, actorId}))
   }
 
-  async updateOne(dto: UpdateNoteDto): Promise<void> {
-    this.client.emit({cmd: "notes.microservice: updateOne"}, {dto})
+  async updateOne(dto: UpdateNoteDto, actorId: string): Promise<void> {
+    this.client.emit({cmd: "notes.microservice: updateOne"}, {dto, actorId})
   }
 
-  async deleteOne(id: string): Promise<void> {
-    this.client.emit({cmd: "notes.microservice: deleteOne"}, {id})
+  async deleteOne(id: string, actorId: string): Promise<void> {
+    this.client.emit({cmd: "notes.microservice: deleteOne"}, {id, actorId})
   }
 }

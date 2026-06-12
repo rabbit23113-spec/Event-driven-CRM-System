@@ -6,7 +6,7 @@ import {
   Param,
   ParseEnumPipe, ParseUUIDPipe,
   Patch,
-  Post,
+  Post, UseGuards,
 } from '@nestjs/common';
 import {UsersService} from './users.service';
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
@@ -14,6 +14,8 @@ import {UserDto} from "../dto/users/user.dto";
 import {CreateUserDto, Role} from "../dto/users/create-user.dto";
 import {UpdateUserDto} from "../dto/users/update-user.dto";
 import {FindByEmailDto} from "../dto/users/find-by-email.dto";
+import {JwtGuard} from "../guards/jwt/jwt.guard";
+import {CurrentUser} from "../decorators/current-user.decorator";
 
 @Controller('users')
 export class UsersController {
@@ -50,24 +52,27 @@ export class UsersController {
     return await this.usersService.findOneByEmail(dto.email);
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Create user"})
   @ApiResponse({status: 201, type: UserDto})
   @Post("create")
-  async createUser(@Body() body: CreateUserDto): Promise<UserDto> {
-    return await this.usersService.createUser(body);
+  async createUser(@Body() body: CreateUserDto, @CurrentUser() actorId: string): Promise<UserDto> {
+    return await this.usersService.createUser(body, actorId);
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update user"})
   @ApiResponse({status: 204})
   @Patch("update")
-  async updateOne(@Body() body: UpdateUserDto): Promise<void> {
-    await this.usersService.updateUser(body);
+  async updateOne(@Body() body: UpdateUserDto, @CurrentUser() actorId: string): Promise<void> {
+    await this.usersService.updateUser(body, actorId);
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Delete user"})
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param("id", new ParseUUIDPipe()) id: string): Promise<void> {
-    await this.usersService.deleteUser(id);
+  async deleteOne(@Param("id", new ParseUUIDPipe()) id: string, @CurrentUser() actorId: string): Promise<void> {
+    await this.usersService.deleteUser(id, actorId);
   }
 }

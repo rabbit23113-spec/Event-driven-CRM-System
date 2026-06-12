@@ -92,19 +92,19 @@ export class AppService {
     return target;
   }
 
-  async createOne(dto: CreateNoteDto): Promise<NoteEntity> {
+  async createOne(dto: CreateNoteDto, actorId: string): Promise<NoteEntity> {
     const note = await this.noteRepo.create(dto);
     await this.noteRepo.save(note);
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "note",
       action: "created",
-      actorId: dto.authorId,
+      actorId,
       subjectId: note.id
     })
     return note;
   }
 
-  async updateOne(dto: UpdateNoteDto): Promise<void> {
+  async updateOne(dto: UpdateNoteDto, actorId: string): Promise<void> {
     const {id, content, authorId, clientId, leadId, dealId} = dto;
     const target = await this.findOne(id)
     if (!target) {
@@ -113,13 +113,13 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "note",
       action: "updated",
-      actorId: dto.authorId,
+      actorId,
       subjectId: target.id
     })
     await this.noteRepo.update(id, {content, authorId, clientId, leadId, dealId});
   }
 
-  async deleteOne(id: string): Promise<void> {
+  async deleteOne(id: string, actorId: string): Promise<void> {
     const target = await this.findOne(id);
     if (!target) {
       throw new NotFoundException(`NoteEntity with id ${id} not found`);
@@ -127,7 +127,7 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "note",
       action: "deleted",
-      actorId: target.authorId,
+      actorId,
       subjectId: target.id
     })
     await this.noteRepo.delete(id);

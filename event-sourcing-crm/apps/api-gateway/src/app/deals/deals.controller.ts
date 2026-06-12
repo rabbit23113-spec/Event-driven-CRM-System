@@ -1,10 +1,23 @@
-import {Body, Controller, Delete, Get, Param, ParseEnumPipe, ParseUUIDPipe, Patch, Post} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseEnumPipe,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  UseGuards
+} from '@nestjs/common';
 import { DealsService } from './deals.service';
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {DealDto, Status} from "../dto/deals/deal.dto";
 import {CreateDealDto} from "../dto/deals/create-deal.dto";
 import {UpdateDealDto} from "../dto/deals/update-deal.dto";
 import {UpdateStatusDto} from "../dto/deals/update-status.dto";
+import {CurrentUser} from "../decorators/current-user.decorator";
+import {JwtGuard} from "../guards/jwt/jwt.guard";
 
 @Controller('deals')
 export class DealsController {
@@ -33,31 +46,35 @@ export class DealsController {
     return await this.dealsService.findByStatus(status)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Create deal" })
   @ApiResponse({status: 201, type: DealDto})
   @Post("create")
-  async create(@Body() createDealDto: CreateDealDto): Promise<DealDto> {
-    return await this.dealsService.createOne(createDealDto)
+  async create(@Body() createDealDto: CreateDealDto, @CurrentUser() actorId: string): Promise<DealDto> {
+    return await this.dealsService.createOne(createDealDto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update deal" })
   @ApiResponse({status: 204})
   @Patch("update")
-  async updateOne(@Body() dto: UpdateDealDto): Promise<void> {
-    return await this.dealsService.updateOne(dto)
+  async updateOne(@Body() dto: UpdateDealDto, @CurrentUser() actorId: string): Promise<void> {
+    return await this.dealsService.updateOne(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update deal by status" })
   @ApiResponse({status: 204})
   @Patch("update/status")
-  async updateOne(@Body() dto: UpdateStatusDto): Promise<void> {
-    return await this.dealsService.updateOne(dto)
+  async updateStatus(@Body() dto: UpdateStatusDto, @CurrentUser() actorId: string): Promise<void> {
+    return await this.dealsService.updateStatus(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Delete deal" })
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
-    return await this.dealsService.deleteOne(id)
+  async deleteOne(@Param('id', new ParseUUIDPipe()) id: string, @CurrentUser() actorId: string): Promise<void> {
+    return await this.dealsService.deleteOne(id, actorId)
   }
 }

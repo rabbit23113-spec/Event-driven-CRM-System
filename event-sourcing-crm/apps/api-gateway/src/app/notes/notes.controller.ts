@@ -1,9 +1,11 @@
-import {Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UseGuards} from '@nestjs/common';
 import {NotesService} from './notes.service';
 import {NoteDto} from "../dto/notes/note.dto";
 import {CreateNoteDto} from "../dto/notes/create-note.dto";
 import {UpdateNoteDto} from "../dto/notes/update-note.dto";
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
+import {JwtGuard} from "../guards/jwt/jwt.guard";
+import {CurrentUser} from "../decorators/current-user.decorator";
 
 @Controller('notes')
 export class NotesController {
@@ -57,24 +59,27 @@ export class NotesController {
     return await this.notesService.findByDealId(dealId);
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Create note"})
   @ApiResponse({status: 201, type: NoteDto})
   @Post("create")
-  async createOne(@Body() dto: CreateNoteDto): Promise<NoteDto> {
-    return await this.notesService.createOne(dto)
+  async createOne(@Body() dto: CreateNoteDto, @CurrentUser() actorId: string): Promise<NoteDto> {
+    return await this.notesService.createOne(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update note"})
   @ApiResponse({status: 204})
   @Patch("update")
-  async updateOne(@Body() dto: UpdateNoteDto): Promise<void> {
-    return await this.notesService.updateOne(dto)
+  async updateOne(@Body() dto: UpdateNoteDto, @CurrentUser() actorId: string): Promise<void> {
+    return await this.notesService.updateOne(dto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Delete note"})
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param("id", new ParseUUIDPipe()) id: string): Promise<void> {
-    return await this.notesService.deleteOne(id);
+  async deleteOne(@Param("id", new ParseUUIDPipe()) id: string, @CurrentUser() actorId: string): Promise<void> {
+    return await this.notesService.deleteOne(id, actorId);
   }
 }

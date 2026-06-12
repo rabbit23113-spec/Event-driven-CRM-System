@@ -1,9 +1,11 @@
-import {Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, UseGuards} from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 import {ClientDto} from "../dto/clients/client.dto";
 import {CreateClientDto} from "../dto/clients/create-client.dto";
 import {UpdateClientDto} from "../dto/clients/update-client.dto";
+import {JwtGuard} from "../guards/jwt/jwt.guard";
+import {CurrentUser} from "../decorators/current-user.decorator";
 
 @Controller('clients')
 export class ClientsController {
@@ -40,24 +42,27 @@ export class ClientsController {
     return await this.clientsService.findOneByName(name);
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Create client" })
   @ApiResponse({status: 201, type: ClientDto})
   @Post("create")
-  async create(@Body() createClientDto: CreateClientDto): Promise<ClientDto> {
-    return await this.clientsService.createOne(createClientDto)
+  async create(@Body() createClientDto: CreateClientDto, @CurrentUser() actorId: string): Promise<ClientDto> {
+    return await this.clientsService.createOne(createClientDto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Update client" })
   @ApiResponse({status: 204})
   @Patch("update")
-  async updateOne(@Body() updateClientDto: UpdateClientDto): Promise<void> {
-    return await this.clientsService.updateOne(updateClientDto)
+  async updateOne(@Body() updateClientDto: UpdateClientDto, @CurrentUser() actorId: string): Promise<void> {
+    return await this.clientsService.updateOne(updateClientDto, actorId)
   }
 
+  @UseGuards(JwtGuard)
   @ApiOperation({summary: "Delete client" })
   @ApiResponse({status: 204})
   @Delete("delete/:id")
-  async deleteOne(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
-    return await this.clientsService.deleteOne(id)
+  async deleteOne(@Param('id', new ParseUUIDPipe()) id: string, @CurrentUser() actorId: string): Promise<void> {
+    return await this.clientsService.deleteOne(id, actorId)
   }
 }

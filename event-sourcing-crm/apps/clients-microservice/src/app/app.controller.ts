@@ -30,17 +30,17 @@ export class AppController {
   }
 
   @MessagePattern({cmd: "clients.microservice: createOne"})
-  async create(@Payload() payload: { dto: CreateClientDto }): Promise<ClientEntity> {
-    return await this.appService.createOne(payload.dto);
+  async create(@Payload() payload: { dto: CreateClientDto, actorId: string }): Promise<ClientEntity> {
+    return await this.appService.createOne(payload.dto, payload.actorId);
   }
 
   @EventPattern({cmd: "clients.microservice: updateOne"})
-  async updateOne(@Payload() payload: { dto: UpdateClientDto }): Promise<void> {
-    await this.appService.updateOne(payload.dto)
+  async updateOne(@Payload() payload: { dto: UpdateClientDto, actorId: string }): Promise<void> {
+    await this.appService.updateOne(payload.dto, payload.actorId)
   }
 
   @EventPattern({cmd: "clients.microservice: deleteOne"})
-  async deleteOne(@Payload() payload: { id: string }): Promise<void> {
-    await this.appService.deleteOne(payload.id);
+  async deleteOne(@Payload() payload: { id: string, actorId: string }): Promise<void> {
+    await this.appService.deleteOne(payload.id, payload.actorId);
   }
 }

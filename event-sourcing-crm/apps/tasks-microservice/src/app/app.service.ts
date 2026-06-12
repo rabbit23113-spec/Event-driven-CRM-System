@@ -106,19 +106,19 @@ export class AppService {
     return target;
   }
 
-  async createOne(dto: CreateTaskDto): Promise<TaskEntity> {
+  async createOne(dto: CreateTaskDto, actorId: string): Promise<TaskEntity> {
     const task = await this.taskRepo.create(dto);
     await this.taskRepo.save(task);
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "task",
       action: "created",
-      actorId: dto.assigneeId,
-      subjectId: task.id
+      actorId,
+      subjectId: task.id,
     })
     return task;
   }
 
-  async updateOne(dto: UpdateTaskDto): Promise<void> {
+  async updateOne(dto: UpdateTaskDto, actorId: string): Promise<void> {
     const {id} = dto;
     const target = await this.findOne(id)
     if (!target) {
@@ -127,13 +127,13 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "task",
       action: "updated",
-      actorId: dto.assigneeId,
-      subjectId: target.id
+      actorId,
+      subjectId: target.id,
     })
     await this.taskRepo.update(id, dto)
   }
 
-  async updateStatus(dto: UpdateStatusDto): Promise<void> {
+  async updateStatus(dto: UpdateStatusDto, actorId: string): Promise<void> {
     const {id} = dto;
     const target = await this.findOne(id)
     if (!target) {
@@ -143,12 +143,12 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "task",
       action: "status_changed",
-      actorId: "mock",
-      subjectId: target.id
+      actorId,
+      subjectId: target.id,
     })
   }
 
-  async deleteOne(id: string): Promise<void> {
+  async deleteOne(id: string, actorId: string): Promise<void> {
     const target = await this.findOne(id);
     if (!target) {
       throw new NotFoundException(`TaskEntity with id ${id} not found`);
@@ -156,8 +156,8 @@ export class AppService {
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "task",
       action: "deleted",
-      actorId: target.assigneeId,
-      subjectId: target.id
+      actorId,
+      subjectId: target.id,
     })
     await this.taskRepo.delete(id);
   }

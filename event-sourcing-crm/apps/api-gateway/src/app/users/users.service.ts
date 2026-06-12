@@ -27,16 +27,16 @@ export class UsersService {
     return await firstValueFrom(this.client.send({cmd: "users.microservice: findByRole"}, {role}))
   }
 
-  async createUser(dto: CreateUserDto): Promise<UserDto> {
-    return await firstValueFrom(this.client.send({cmd: "users.microservice: createUser"}, {dto}))
+  async createUser(dto: CreateUserDto, actorId: string): Promise<UserDto> {
+    return await firstValueFrom(this.client.send({cmd: "users.microservice: createUser"}, {dto, actorId}))
   }
 
-  async updateUser(dto: UpdateUserDto): Promise<void> {
-    this.client.emit({cmd: "users.microservice: updateOne"}, {dto})
+  async updateUser(dto: UpdateUserDto, actorId: string): Promise<void> {
+    this.client.emit({cmd: "users.microservice: updateOne"}, {dto, actorId})
   }
 
-  async deleteUser(id: string): Promise<void> {
-    this.client.emit({cmd: "users.microservice: deleteOne"}, {id})
+  async deleteUser(id: string, actorId: string): Promise<void> {
+    this.client.emit({cmd: "users.microservice: deleteOne"}, {id, actorId})
   }
 
 }

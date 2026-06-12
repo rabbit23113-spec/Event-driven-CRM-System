@@ -63,16 +63,21 @@ export class AppService {
 
   async createOne(dto: CreateAuthSessionDto): Promise<AuthSessionEntity> {
     const MonthInSeconds = 60 * 60 * 24 * 30;
-    const expiresIn = Date.now() + MonthInSeconds
+    const currentDateInSeconds = new Date().getSeconds()
+    const expiresIn = currentDateInSeconds + MonthInSeconds
     const refreshToken = this.jwtService.sign({sub: dto.userId}, {expiresIn});
     const salt = await bcrypt.genSalt(12)
     const refreshTokenHash = await bcrypt.hash(refreshToken, salt)
+    const existedAuthSession: AuthSessionEntity | null = await this.authSessionRepo.findOneBy({userId: dto.userId})
+    if (existedAuthSession) {
+      await this.deleteOne(existedAuthSession.id)
+    }
     const authSession = await this.authSessionRepo.create({...dto, expiresAt: new Date(expiresIn), refreshTokenHash})
     await this.authSessionRepo.save(authSession);
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "auth",
       action: "created",
-      subjectId: dto.userId
+      subjectId: authSession.id,
     });
     return authSession;
   }
@@ -87,29 +92,30 @@ export class AppService {
     if (!authSession) {
       throw new UnauthorizedException(`Auth session with user id: ${userId} not found`);
     }
-    if (new Date(authSession.expiresAt).getTime() < Date.now()) {
+    const currentDateInSeconds = new Date().getSeconds()
+    if (new Date(authSession.expiresAt).getTime() < currentDateInSeconds) {
       await this.authSessionRepo.delete(authSession.id)
       throw new UnauthorizedException("Auth session is expired");
     }
     const thirtyMinutesInSeconds = 60 * 30;
-    const expiresIn = Date.now() + thirtyMinutesInSeconds;
+    const expiresIn = currentDateInSeconds + thirtyMinutesInSeconds;
     const accessToken = this.jwtService.sign({sub: userId}, {expiresIn});
     return {accessToken};
   }
 
-  async signUp(dto: SignUpDto): Promise<AccessTokenDto> {
+  async signUp(dto: SignUpDto, ip: string): Promise<AccessTokenDto> {
     const user: UserDto = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: createUser"}, {dto}))
-    await this.createOne({userId: user.id, ip: "mock"})
+    await this.createOne({userId: user.id, ip})
     return await this.generateAccessToken(user.id)
   }
 
-  async signIn(dto: SignInDto): Promise<AccessTokenDto> {
+  async signIn(dto: SignInDto, ip: string): Promise<AccessTokenDto> {
     const user: UserDto = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findByEmail"}, {email: dto.email}))
     const isMatch = await bcrypt.compare(dto.password, user.passwordHash);
     if (!isMatch) {
       throw new UnauthorizedException("Incorrect email or password");
     }
-    await this.createOne({userId: user.id, ip: "mock"})
+    await this.createOne({userId: user.id, ip})
     return await this.generateAccessToken(user.id)
   }
 

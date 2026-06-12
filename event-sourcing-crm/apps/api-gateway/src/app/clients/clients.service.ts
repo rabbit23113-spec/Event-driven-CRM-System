@@ -27,15 +27,15 @@ export class ClientsService {
     return await firstValueFrom(this.client.send({cmd: "clients.microservice: findOneByName"}, {name}))
   }
 
-  async createOne(dto: CreateClientDto): Promise<ClientDto> {
-    return await firstValueFrom(this.client.send({cmd: "clients.microservice: createOne"}, {dto}))
+  async createOne(dto: CreateClientDto, actorId: string): Promise<ClientDto> {
+    return await firstValueFrom(this.client.send({cmd: "clients.microservice: createOne"}, {dto, actorId}))
   }
 
-  async updateOne(dto: UpdateClientDto): Promise<void> {
-    this.client.emit({cmd: "clients.microservice: updateOne"}, {dto})
+  async updateOne(dto: UpdateClientDto, actorId: string): Promise<void> {
+    this.client.emit({cmd: "clients.microservice: updateOne"}, {dto, actorId})
   }
 
-  async deleteOne(id: string): Promise<void> {
-    this.client.emit({cmd: "clients.microservice: deleteOne"}, {id})
+  async deleteOne(id: string, actorId: string): Promise<void> {
+    this.client.emit({cmd: "clients.microservice: deleteOne"}, {id, actorId})
   }
 }
