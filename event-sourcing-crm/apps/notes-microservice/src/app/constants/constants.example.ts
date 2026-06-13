@@ -14,5 +14,17 @@ export const RMQ_PORT = 5672;
 export const RMQ_EVENTS_CLIENT_ID = "crm_rabbitmq_events_client_id";
 export const RMQ_EVENTS_QUEUE = "crm_events_queue";
 
-export const REDIS_HOST="crm_reddis"
-export const REDIS_PORT=6379
+export const RMQ_USERS_CLIENT_ID = "crm_rabbitmq_users_client_id";
+export const RMQ_USERS_QUEUE = "crm_users_queue";
+
+export const RMQ_CLIENTS_CLIENT_ID = "crm_rabbitmq_clients_client_id";
+export const RMQ_CLIENTS_QUEUE = "crm_clients_queue";
+
+export const RMQ_LEADS_CLIENT_ID = "crm_rabbitmq_leads_client_id";
+export const RMQ_LEADS_QUEUE = "crm_leads_queue";
+
+export const RMQ_DEALS_CLIENT_ID = "crm_rabbitmq_deals_client_id";
+export const RMQ_DEALS_QUEUE = "crm_deals_queue";
+
+export const REDIS_HOST = "crm_reddis"
+export const REDIS_PORT = 6379

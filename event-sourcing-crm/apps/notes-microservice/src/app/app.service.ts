@@ -5,15 +5,25 @@ import {UpdateNoteDto} from "./dto/update-note.dto";
 import {NoteEntity} from "./entities/note.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
-import {RMQ_EVENTS_CLIENT_ID} from "./constants/constants";
+import {
+  RMQ_CLIENTS_CLIENT_ID, RMQ_DEALS_CLIENT_ID,
+  RMQ_EVENTS_CLIENT_ID,
+  RMQ_LEADS_CLIENT_ID,
+  RMQ_USERS_CLIENT_ID
+} from "./constants/constants";
 import type {Cache} from "cache-manager";
 import {CACHE_MANAGER} from "@nestjs/cache-manager";
+import {firstValueFrom} from "rxjs";
 
 @Injectable()
 export class AppService {
   constructor(@InjectRepository(NoteEntity) private readonly noteRepo: Repository<NoteEntity>,
               @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
-              @Inject(CACHE_MANAGER) private readonly cache: Cache
+              @Inject(CACHE_MANAGER) private readonly cache: Cache,
+              @Inject(RMQ_USERS_CLIENT_ID) private readonly usersClient: ClientProxy,
+              @Inject(RMQ_CLIENTS_CLIENT_ID) private readonly clientsClient: ClientProxy,
+              @Inject(RMQ_LEADS_CLIENT_ID) private readonly leadsClient: ClientProxy,
+              @Inject(RMQ_DEALS_CLIENT_ID) private readonly dealsClient: ClientProxy,
   ) {
   }
 
@@ -93,6 +103,31 @@ export class AppService {
   }
 
   async createOne(dto: CreateNoteDto, actorId: string): Promise<NoteEntity> {
+    const {authorId, clientId, leadId, dealId} = dto;
+    if (authorId) {
+      const user = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findOne"}, {id: authorId}));
+      if (!user) {
+        throw new NotFoundException(`User with id ${authorId} not found`);
+      }
+    }
+    if (clientId) {
+      const client = await firstValueFrom(this.clientsClient.send({cmd: "clients.microservice: findOne"}, {id: clientId}));
+      if (!client) {
+        throw new NotFoundException(`Client with id ${clientId} not found`);
+      }
+    }
+    if (leadId) {
+      const lead = await firstValueFrom(this.leadsClient.send({cmd: "leads.microservice: findOne"}, {id: leadId}));
+      if (!lead) {
+        throw new NotFoundException(`Lead with id ${leadId} not found`);
+      }
+    }
+    if (dealId) {
+      const deal = await firstValueFrom(this.dealsClient.send({cmd: "deals.microservice: findOne"}, {id: dealId}));
+      if (!deal) {
+        throw new NotFoundException(`Deal with id ${dealId} not found`);
+      }
+    }
     const note = await this.noteRepo.create(dto);
     await this.noteRepo.save(note);
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
