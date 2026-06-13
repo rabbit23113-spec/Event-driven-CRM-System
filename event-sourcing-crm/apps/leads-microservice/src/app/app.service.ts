@@ -18,6 +18,7 @@ export class AppService {
               @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
               @Inject(CACHE_MANAGER) private readonly cache: Cache,
               @Inject(RMQ_USERS_CLIENT_ID) private readonly usersClient: ClientProxy,
+
   ) {
   }
 

@@ -14,5 +14,8 @@ export const RMQ_PORT = 5672;
 export const RMQ_EVENTS_CLIENT_ID = "crm_rabbitmq_events_client_id";
 export const RMQ_EVENTS_QUEUE = "crm_events_queue";
 
+export const RMQ_USERS_CLIENT_ID = "crm_rabbitmq_users_client_id";
+export const RMQ_USERS_QUEUE = "crm_users_queue";
+
 export const REDIS_HOST="crm_reddis"
 export const REDIS_PORT=6379

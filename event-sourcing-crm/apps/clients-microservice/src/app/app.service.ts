@@ -1,19 +1,21 @@
 import {Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {ClientProxy} from "@nestjs/microservices";
 import {ClientEntity} from "./entities/client.entity";
-import {RMQ_EVENTS_CLIENT_ID} from "./constants/constants";
+import {RMQ_EVENTS_CLIENT_ID, RMQ_USERS_CLIENT_ID} from "./constants/constants";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {CreateClientDto} from "./dto/create-client.dto";
 import {UpdateClientDto} from "./dto/update-client.dto";
 import type {Cache} from "cache-manager";
 import {CACHE_MANAGER} from "@nestjs/cache-manager";
+import {firstValueFrom} from "rxjs";
 
 @Injectable()
 export class AppService {
   constructor(@InjectRepository(ClientEntity) private readonly clientRepo: Repository<ClientEntity>,
               @Inject(RMQ_EVENTS_CLIENT_ID) private readonly eventsClient: ClientProxy,
-              @Inject(CACHE_MANAGER) private readonly cache: Cache
+              @Inject(CACHE_MANAGER) private readonly cache: Cache,
+              @Inject(RMQ_USERS_CLIENT_ID) private readonly usersClient: ClientProxy,
   ) {
   }
 
@@ -64,6 +66,10 @@ export class AppService {
   }
 
   async createOne(dto: CreateClientDto, actorId: string): Promise<ClientEntity> {
+    const user = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findOne"}, {id: dto.ownerId}))
+    if (!user) {
+      throw new NotFoundException("Invalid owner id")
+    }
     const client = await this.clientRepo.create(dto);
     await this.clientRepo.save(client);
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
@@ -76,10 +82,16 @@ export class AppService {
   }
 
   async updateOne(dto: UpdateClientDto, actorId: string): Promise<void> {
-    const {id, name, email, phone, companyName, ownerId} = dto;
+    const {id, ownerId} = dto;
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
+    }
+    if (ownerId) {
+      const user = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findOne"}, {id: dto.ownerId}))
+      if (!user) {
+        throw new NotFoundException("Invalid owner id")
+      }
     }
     this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
       domain: "client",
@@ -87,7 +99,7 @@ export class AppService {
       actorId,
       subjectId: target.id
     })
-    await this.clientRepo.update(id, {name, email, phone, companyName, ownerId});
+    await this.clientRepo.update(id, dto);
   }
 
   async deleteOne(id: string, actorId: string): Promise<void> {
