@@ -130,7 +130,7 @@ export class AppService {
     }
     const note = await this.noteRepo.create(dto);
     await this.noteRepo.save(note);
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "note",
       action: "created",
       actorId,
@@ -169,7 +169,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`NoteEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "note",
       action: "updated",
       actorId,
@@ -183,7 +183,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`NoteEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "note",
       action: "deleted",
       actorId,

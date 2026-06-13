@@ -75,7 +75,7 @@ export class AppService {
       }
       const authSession = await this.authSessionRepo.create({...dto, expiresAt, refreshTokenHash})
       await this.authSessionRepo.save(authSession);
-      this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+      this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
         domain: "auth",
         action: "created",
         subjectId: authSession.id,
@@ -148,7 +148,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`Auth session with id: ${id} not found`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "auth",
       action: "deleted",
       actorId: target.userId,

@@ -68,7 +68,7 @@ export class EventsController {
   @ApiOperation({summary: "Create event"})
   @ApiResponse({status: 201})
   @Post("create")
-  async createOne(@Body() body: CreateEventDto): Promise<void> {
-    await this.eventsService.createOne(body);
+  async createOne(@Body() body: CreateEventDto): Promise<EventDto> {
+    return await this.eventsService.createOne(body);
   }
 }

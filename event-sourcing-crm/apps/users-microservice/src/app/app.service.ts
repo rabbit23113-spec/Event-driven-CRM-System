@@ -72,7 +72,7 @@ export class AppService {
     const passwordHash = await bcrypt.hash(dto.password, salt);
     const user = this.usersRepo.create({...dto, passwordHash});
     await this.usersRepo.save(user);
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "user",
       action: "created",
       subjectId: user.id,
@@ -87,7 +87,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`Cannot find user with id ${id}`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "user",
       action: "updated",
       subjectId: target.id,
@@ -101,7 +101,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`Cannot find user with id ${id}`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "user",
       action: "deleted",
       subjectId: target.id,

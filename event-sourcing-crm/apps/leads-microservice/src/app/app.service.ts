@@ -75,7 +75,7 @@ export class AppService {
     }
     const lead = await this.leadRepo.create(dto);
     await this.leadRepo.save(lead);
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "lead",
       action: "created",
       actorId,
@@ -96,7 +96,7 @@ export class AppService {
         throw new NotFoundException("Incorrect owner id")
       }
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "lead",
       action: "updated",
       actorId,
@@ -111,7 +111,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "lead",
       action: "status_changed",
       actorId,
@@ -125,7 +125,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`LeadEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "lead",
       action: "deleted",
       actorId,

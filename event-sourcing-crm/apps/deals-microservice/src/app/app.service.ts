@@ -49,7 +49,7 @@ export class AppService {
   async createOne(dto: CreateDealDto, actorId: string): Promise<DealEntity> {
     const deal = await this.dealRepo.create(dto);
     await this.dealRepo.save(deal);
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "deal",
       action: "created",
       actorId,
@@ -64,7 +64,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`DealEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "deal",
       action: "updated",
       actorId,
@@ -80,7 +80,7 @@ export class AppService {
       throw new NotFoundException(`DealEntity with id ${id} not found`);
     }
     await this.dealRepo.update(id, dto)
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "deal",
       action: "status_changed",
       actorId,
@@ -93,7 +93,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`DealEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "deal",
       action: "deleted",
       actorId,

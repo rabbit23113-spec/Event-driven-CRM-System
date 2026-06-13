@@ -72,7 +72,7 @@ export class AppService {
     }
     const client = await this.clientRepo.create(dto);
     await this.clientRepo.save(client);
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "client",
       action: "created",
       actorId,
@@ -93,7 +93,7 @@ export class AppService {
         throw new NotFoundException("Invalid owner id")
       }
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "client",
       action: "updated",
       actorId,
@@ -107,7 +107,7 @@ export class AppService {
     if (!target) {
       throw new NotFoundException(`ClientEntity with id ${id} not found`);
     }
-    this.eventsClient.emit({cmd: 'events.microservice: createOne'}, {
+    this.eventsClient.send({cmd: 'events.microservice: createOne'}, {
       domain: "client",
       action: "deleted",
       actorId,

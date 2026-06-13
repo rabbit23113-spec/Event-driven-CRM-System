@@ -4,10 +4,11 @@ import {RMQ_EVENTS_CLIENT_ID} from "../constants/constants";
 import {firstValueFrom} from "rxjs";
 import {EventDto} from "../dto/events/event.dto";
 import {Action, CreateEventDto, Domain} from "../dto/events/create-event.dto";
+import {EventsGateway} from "./events.gateway";
 
 @Injectable()
 export class EventsService {
-  constructor(@Inject(RMQ_EVENTS_CLIENT_ID) private readonly client: ClientProxy) {
+  constructor(@Inject(RMQ_EVENTS_CLIENT_ID) private readonly client: ClientProxy, private readonly eventsGateway: EventsGateway) {
   }
 
   async findAll(): Promise<EventDto[]> {
@@ -34,7 +35,9 @@ export class EventsService {
     return await firstValueFrom(this.client.send({cmd: "events.microservice: findByAction"}, {action}))
   }
 
-  async createOne(dto: CreateEventDto): Promise<void> {
-    this.client.emit({cmd: "events.microservice: createOne"}, {dto})
+  async createOne(dto: CreateEventDto): Promise<EventDto> {
+    const event = await firstValueFrom(this.client.send({cmd: "events.microservice: createOne"}, {dto}))
+    await this.eventsGateway.handleMessage(event)
+    return event
   }
 }
