@@ -1,7 +1,7 @@
-import {Body, Controller, Get, Param, ParseEnumPipe, ParseUUIDPipe, Post} from '@nestjs/common';
+import {Controller, Get, Param, ParseEnumPipe, ParseUUIDPipe} from '@nestjs/common';
 import {EventsService} from './events.service';
 import {EventDto} from "../dto/events/event.dto";
-import {Action, CreateEventDto, Domain} from "../dto/events/create-event.dto";
+import {Action, Domain} from "../dto/events/create-event.dto";
 import {ApiOperation, ApiParam, ApiResponse} from "@nestjs/swagger";
 
 

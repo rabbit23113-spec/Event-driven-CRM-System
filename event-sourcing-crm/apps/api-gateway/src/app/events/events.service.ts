@@ -3,12 +3,11 @@ import {ClientProxy} from "@nestjs/microservices";
 import {RMQ_EVENTS_CLIENT_ID} from "../constants/constants";
 import {firstValueFrom} from "rxjs";
 import {EventDto} from "../dto/events/event.dto";
-import {Action, CreateEventDto, Domain} from "../dto/events/create-event.dto";
-import {EventsGateway} from "./events.gateway";
+import {Action, Domain} from "../dto/events/create-event.dto";
 
 @Injectable()
 export class EventsService {
-  constructor(@Inject(RMQ_EVENTS_CLIENT_ID) private readonly client: ClientProxy, private readonly eventsGateway: EventsGateway) {
+  constructor(@Inject(RMQ_EVENTS_CLIENT_ID) private readonly client: ClientProxy) {
   }
 
   async findAll(): Promise<EventDto[]> {
