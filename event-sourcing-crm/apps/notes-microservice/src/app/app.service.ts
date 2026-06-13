@@ -140,7 +140,31 @@ export class AppService {
   }
 
   async updateOne(dto: UpdateNoteDto, actorId: string): Promise<void> {
-    const {id, content, authorId, clientId, leadId, dealId} = dto;
+    const {id, authorId, clientId, leadId, dealId} = dto;
+    if (authorId) {
+      const user = await firstValueFrom(this.usersClient.send({cmd: "users.microservice: findOne"}, {id: authorId}));
+      if (!user) {
+        throw new NotFoundException(`User with id ${authorId} not found`);
+      }
+    }
+    if (clientId) {
+      const client = await firstValueFrom(this.clientsClient.send({cmd: "clients.microservice: findOne"}, {id: clientId}));
+      if (!client) {
+        throw new NotFoundException(`Client with id ${clientId} not found`);
+      }
+    }
+    if (leadId) {
+      const lead = await firstValueFrom(this.leadsClient.send({cmd: "leads.microservice: findOne"}, {id: leadId}));
+      if (!lead) {
+        throw new NotFoundException(`Lead with id ${leadId} not found`);
+      }
+    }
+    if (dealId) {
+      const deal = await firstValueFrom(this.dealsClient.send({cmd: "deals.microservice: findOne"}, {id: dealId}));
+      if (!deal) {
+        throw new NotFoundException(`Deal with id ${dealId} not found`);
+      }
+    }
     const target = await this.findOne(id)
     if (!target) {
       throw new NotFoundException(`NoteEntity with id ${id} not found`);
@@ -151,7 +175,7 @@ export class AppService {
       actorId,
       subjectId: target.id
     })
-    await this.noteRepo.update(id, {content, authorId, clientId, leadId, dealId});
+    await this.noteRepo.update(id, dto);
   }
 
   async deleteOne(id: string, actorId: string): Promise<void> {
