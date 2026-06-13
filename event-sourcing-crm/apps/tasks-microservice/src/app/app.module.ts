@@ -30,7 +30,52 @@ import {CacheModule} from "@nestjs/cache-manager";
           durable: true,
         },
       }
-    }]),
+    },
+      {
+        name: constants.RMQ_USERS_CLIENT_ID,
+        transport: Transport.RMQ,
+        options: {
+          urls: [`amqp://${constants.RMQ_USER}:${constants.RMQ_PASS}@${constants.RMQ_HOST}:${constants.RMQ_PORT}`],
+          queue: constants.RMQ_USERS_QUEUE,
+          queueOptions: {
+            durable: true,
+          },
+        }
+      },
+      {
+        name: constants.RMQ_CLIENTS_CLIENT_ID,
+        transport: Transport.RMQ,
+        options: {
+          urls: [`amqp://${constants.RMQ_USER}:${constants.RMQ_PASS}@${constants.RMQ_HOST}:${constants.RMQ_PORT}`],
+          queue: constants.RMQ_CLIENTS_QUEUE,
+          queueOptions: {
+            durable: true,
+          },
+        }
+      },
+      {
+        name: constants.RMQ_LEADS_CLIENT_ID,
+        transport: Transport.RMQ,
+        options: {
+          urls: [`amqp://${constants.RMQ_USER}:${constants.RMQ_PASS}@${constants.RMQ_HOST}:${constants.RMQ_PORT}`],
+          queue: constants.RMQ_LEADS_QUEUE,
+          queueOptions: {
+            durable: true,
+          },
+        }
+      },
+      {
+        name: constants.RMQ_DEALS_CLIENT_ID,
+        transport: Transport.RMQ,
+        options: {
+          urls: [`amqp://${constants.RMQ_USER}:${constants.RMQ_PASS}@${constants.RMQ_HOST}:${constants.RMQ_PORT}`],
+          queue: constants.RMQ_DEALS_QUEUE,
+          queueOptions: {
+            durable: true,
+          },
+        }
+      }
+    ]),
     CacheModule.register({
       store: redisStore,
       host: constants.REDIS_HOST,
