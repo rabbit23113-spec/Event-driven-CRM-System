@@ -6,10 +6,11 @@ import {Priority, Status, TaskDto} from "../dto/tasks/task.dto";
 import {CreateTaskDto} from "../dto/tasks/create-task.dto";
 import {UpdateTaskDto} from "../dto/tasks/update-task.dto";
 import {UpdateStatusDto} from "../dto/tasks/update-status.dto";
+import {TasksGateway} from "./tasks.gateway";
 
 @Injectable()
 export class TasksService {
-  constructor(@Inject(RMQ_TASKS_CLIENT_ID) private readonly client: ClientProxy) {
+  constructor(@Inject(RMQ_TASKS_CLIENT_ID) private readonly client: ClientProxy, @Inject(TasksGateway) private readonly tasksGateway: TasksGateway,) {
   }
 
   async findAll(): Promise<TaskDto[]> {
@@ -41,7 +42,9 @@ export class TasksService {
   }
 
   async createOne(dto: CreateTaskDto, actorId: string): Promise<TaskDto> {
-    return await firstValueFrom(this.client.send({cmd: "tasks.microservice: createOne"}, {dto, actorId}))
+    const task = await firstValueFrom(this.client.send({cmd: "tasks.microservice: createOne"}, {dto, actorId}))
+    await this.tasksGateway.handleMessage(task)
+    return task
   }
 
   async updateOne(dto: UpdateTaskDto, actorId: string): Promise<void> {

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
 import {ClientsModule, Transport} from "@nestjs/microservices";
+import { TasksGateway } from './tasks.gateway';
 import * as constants from "../constants/constants";
 
 @Module({
@@ -19,6 +20,6 @@ import * as constants from "../constants/constants";
     }]),
   ],
   controllers: [TasksController],
-  providers: [TasksService],
+  providers: [TasksService, TasksGateway],
 })
 export class TasksModule {}
