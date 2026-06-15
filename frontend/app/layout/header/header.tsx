@@ -1,99 +1,56 @@
 "use client"
 
-import Link from "next/link";
-import {CustomButton} from "@/app/components/button/button";
-import {Popover, Transition} from "@headlessui/react";
-import {Fragment} from "react";
+import {Popover, PopoverButton, PopoverPanel} from "@headlessui/react";
+import LinkBlock from "@/app/components/linkBlock";
+import CustomButton from "@/app/components/button";
 
 export const Header = () => {
     return (
-        <header className={`h-16 bg-background border border-border text-foreground flex items-center px-6 sticky`}>
-            <div className={"flex items-center w-full justify-between"}>
-                <img className={"w-13 h-13"} src={"../../favicon.ico"}/>
-                <nav className={"flex items-center gap-3"}>
-                    <Popover className="relative">
-                        <Popover.Button
-                            className={"text-foreground font-medium outline-0"}>Основное</Popover.Button>
-                        <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0 translate-y-1"
-                            enterTo="opacity-100 translate-y-0"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100 translate-y-0"
-                            leaveTo="opacity-0 translate-y-1"
-                        >
-                            <Popover.Panel
-                                className="absolute z-10 bg-card px-3 py-3 my-4 w-screen max-w-max rounded-md shadow-lg">
-                                <div className="grid grid-cols-1 gap-3">
-                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
-                                          href={"/"}>Главная</Link>
-                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
-                                          href={"/dashboard"}>Дашборд</Link>
-                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
-                                          href={"/audit"}>Журнал аудита</Link>
-                                </div>
-                            </Popover.Panel>
-                        </Transition>
-                    </Popover>
-                    <Popover className="relative">
-                        <Popover.Button
-                            className={"text-foreground font-medium outline-0"}>Бизнес</Popover.Button>
-                        <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0 translate-y-1"
-                            enterTo="opacity-100 translate-y-0"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100 translate-y-0"
-                            leaveTo="opacity-0 translate-y-1"
-                        >
-                            <Popover.Panel
-                                className="absolute z-10 bg-card px-3 py-3 my-4 w-screen max-w-max rounded-md shadow-lg">
-                                <div className="grid grid-cols-1 gap-3">
-                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
-                                          href={"/leads"}>Лиды</Link>
-                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
-                                          href={"/clients"}>Клиенты</Link>
-                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
-                                          href={"/deals"}>Сделки</Link>
-                                </div>
-                            </Popover.Panel>
-                        </Transition>
-                    </Popover>
-                    <Popover className="relative">
-                        <Popover.Button
-                            className={"text-foreground font-medium outline-0"}>Продуктивность</Popover.Button>
-                        <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-200"
-                            enterFrom="opacity-0 translate-y-1"
-                            enterTo="opacity-100 translate-y-0"
-                            leave="transition ease-in duration-150"
-                            leaveFrom="opacity-100 translate-y-0"
-                            leaveTo="opacity-0 translate-y-1"
-                        >
-                            <Popover.Panel
-                                className="absolute z-10 bg-card px-3 py-3 my-4 w-screen max-w-max rounded-md shadow-lg">
-                                <div className="grid grid-cols-1 gap-3">
-                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
-                                          href={"/tasks"}>Задачи</Link>
-                                </div>
-                            </Popover.Panel>
-                        </Transition>
-                    </Popover>
-                    <Link className={"text-foreground font-medium outline-0"}
-                          href={"/settings"}>Настройки</Link>
-                </nav>
-                <div className={"flex items-center gap-2"}>
-                    {/* here will be authentication logic */}
-                    <Link href={"/signin"}>
-                        <CustomButton variant={"outline"}>Вход</CustomButton>
-                    </Link>
-                    <Link href={"/signup"}>
-                        <CustomButton variant={"primary"}>Регистрация</CustomButton>
-                    </Link>
-                </div>
+        <header className={"border border-border h-28 w-full flex items-center justify-between px-24 sticky"}>
+            <div className={"text-foreground font-medium text-3.5"}>
+                CRM v0.1
+            </div>
+            <nav className={"flex gap-8"}>
+                <Popover className={"relative"}>
+                    <PopoverButton className={"text-foreground text-3.5 outline-0 hover:text-primary-hover"}>
+                        Основное
+                    </PopoverButton>
+                    <PopoverPanel className={"absolute z-50 top-full left=0 m-4 border border-border rounded-md"}>
+                        <div className={"h-fit rounded-md flex flex-col items-start justify-start bg-card"}>
+                            <LinkBlock href={"/"} name={"Главная"} iconName={"home-03"} />
+                            <LinkBlock href={"/"} name={"Дашборд"} iconName={"dashboard-square-01"} />
+                            <LinkBlock href={"/"} name={"Настройки"} iconName={"setting-01"} />
+                            <LinkBlock href={"/"} name={"Журнал аудита"} iconName={"audit-02"} />
+                        </div>
+                    </PopoverPanel>
+                </Popover>
+                <Popover className={"relative"}>
+                    <PopoverButton className={"text-foreground text-3.5 outline-0 hover:text-primary-hover"}>
+                        Коммерция
+                    </PopoverButton>
+                    <PopoverPanel className={"absolute top-full z-50 left=0 m-4 border border-border rounded-md "}>
+                        <div className={"h-fit rounded-md flex flex-col items-start justify-start bg-card"}>
+                            <LinkBlock href={"/"} name={"Сделки"} iconName={"briefcase-01"} />
+                            <LinkBlock href={"/"} name={"Лиды"} iconName={"user-question-01"} />
+                            <LinkBlock href={"/"} name={"Клиенты"} iconName={"user"} />
+                        </div>
+                    </PopoverPanel>
+                </Popover>
+                <Popover className={"relative"}>
+                    <PopoverButton className={"text-foreground text-3.5 outline-0 hover:text-primary-hover"}>
+                        Задачи и аналитика
+                    </PopoverButton>
+                    <PopoverPanel className={"absolute top-full z-50 left=0 m-4 border border-border rounded-md"}>
+                        <div className={"h-fit rounded-md flex flex-col items-start justify-start bg-card"}>
+                            <LinkBlock href={"/"} name={"Аналитика"} iconName={"analytics-01"} />
+                            <LinkBlock href={"/"} name={"Задачи"} iconName={"sticky-note-02"} />
+                        </div>
+                    </PopoverPanel>
+                </Popover>
+            </nav>
+            <div className={"flex gap-3"}>
+                <CustomButton variant={"primary"}>Регистрация</CustomButton>
+                <CustomButton variant={"outline"}>Вход</CustomButton>
             </div>
         </header>
     )
