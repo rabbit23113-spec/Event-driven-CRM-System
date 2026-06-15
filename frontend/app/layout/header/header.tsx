@@ -9,11 +9,11 @@ export const Header = () => {
     return (
         <header className={`h-16 bg-background border border-border text-foreground flex items-center px-6`}>
             <div className={"flex items-center w-full justify-between"}>
-                <div className={"font-semibold text-foreground"}>Event Sourcing CRM</div>
+                <img className={"w-13 h-13"} src={"../../favicon.ico"}/>
                 <nav className={"flex items-center gap-3"}>
                     <Popover className="relative">
                         <Popover.Button
-                            className={"text-primary font-medium hover:text-primary-hover outline-0"}>Основное</Popover.Button>
+                            className={"text-foreground font-medium outline-0"}>Основное</Popover.Button>
                         <Transition
                             as={Fragment}
                             enter="transition ease-out duration-200"
@@ -26,11 +26,11 @@ export const Header = () => {
                             <Popover.Panel
                                 className="absolute z-10 bg-card px-3 py-3 my-4 w-screen max-w-max rounded-md shadow-lg">
                                 <div className="grid grid-cols-1 gap-3">
-                                    <Link className={"text-primary font-medium hover:text-primary-hover"}
+                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
                                           href={"/"}>Главная</Link>
-                                    <Link className={"text-primary font-medium hover:text-primary-hover"}
+                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
                                           href={"/dashboard"}>Дашборд</Link>
-                                    <Link className={"text-primary font-medium hover:text-primary-hover"}
+                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
                                           href={"/audit"}>Журнал аудита</Link>
                                 </div>
                             </Popover.Panel>
@@ -38,7 +38,7 @@ export const Header = () => {
                     </Popover>
                     <Popover className="relative">
                         <Popover.Button
-                            className={"text-primary font-medium hover:text-primary-hover outline-0"}>Бизнес</Popover.Button>
+                            className={"text-foreground font-medium outline-0"}>Бизнес</Popover.Button>
                         <Transition
                             as={Fragment}
                             enter="transition ease-out duration-200"
@@ -51,11 +51,11 @@ export const Header = () => {
                             <Popover.Panel
                                 className="absolute z-10 bg-card px-3 py-3 my-4 w-screen max-w-max rounded-md shadow-lg">
                                 <div className="grid grid-cols-1 gap-3">
-                                    <Link className={"text-primary font-medium hover:text-primary-hover"}
+                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
                                           href={"/leads"}>Лиды</Link>
-                                    <Link className={"text-primary font-medium hover:text-primary-hover"}
+                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
                                           href={"/clients"}>Клиенты</Link>
-                                    <Link className={"text-primary font-medium hover:text-primary-hover"}
+                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
                                           href={"/deals"}>Сделки</Link>
                                 </div>
                             </Popover.Panel>
@@ -63,7 +63,7 @@ export const Header = () => {
                     </Popover>
                     <Popover className="relative">
                         <Popover.Button
-                            className={"text-primary font-medium hover:text-primary-hover outline-0"}>Продуктивность</Popover.Button>
+                            className={"text-foreground font-medium outline-0"}>Продуктивность</Popover.Button>
                         <Transition
                             as={Fragment}
                             enter="transition ease-out duration-200"
@@ -76,19 +76,19 @@ export const Header = () => {
                             <Popover.Panel
                                 className="absolute z-10 bg-card px-3 py-3 my-4 w-screen max-w-max rounded-md shadow-lg">
                                 <div className="grid grid-cols-1 gap-3">
-                                    <Link className={"text-primary font-medium hover:text-primary-hover"}
+                                    <Link className={"text-foreground-secondary font-medium hover:text-foreground"}
                                           href={"/tasks"}>Задачи</Link>
                                 </div>
                             </Popover.Panel>
                         </Transition>
                     </Popover>
-                    <Link className={"text-primary font-medium hover:text-primary-hover"}
+                    <Link className={"text-foreground font-medium outline-0"}
                           href={"/settings"}>Настройки</Link>
                 </nav>
                 <div className={"flex items-center gap-2"}>
                     {/* here will be authentication logic */}
                     <Link href={"/signin"}>
-                        <CustomButton variant={"primary"}>Вход</CustomButton>
+                        <CustomButton variant={"outline"}>Вход</CustomButton>
                     </Link>
                     <Link href={"/signup"}>
                         <CustomButton variant={"primary"}>Регистрация</CustomButton>
