@@ -7,7 +7,7 @@ import {Fragment} from "react";
 
 export const Header = () => {
     return (
-        <header className={`h-16 bg-background border border-border text-foreground flex items-center px-6`}>
+        <header className={`h-16 bg-background border border-border text-foreground flex items-center px-6 sticky`}>
             <div className={"flex items-center w-full justify-between"}>
                 <img className={"w-13 h-13"} src={"../../favicon.ico"}/>
                 <nav className={"flex items-center gap-3"}>
