@@ -2,11 +2,11 @@
 
 import Input from "@/app/components/input";
 import {Checkbox} from "@headlessui/react";
-import {useState} from "react";
 import CustomButton from "@/app/components/button";
+import CustomCheckbox from "@/app/components/checkbox";
+import Link from "next/link";
 
 const SignUpPage = () => {
-    const [enabled, setEnabled] = useState(false)
     return <div className={"min-h-screen w-full justify-center items-center flex flex-col gap-8 pt-24 pb-24"}>
         <div className={"flex flex-col gap-8 justify-center items-start"}>
             <div className={"text-foreground text-2xl"}>
@@ -19,23 +19,9 @@ const SignUpPage = () => {
                 <Input label={"Пароль"} placeholder={"Придумайте пароль"}/>
                 <Input label={"Повторите пароль"} placeholder={"Повторите пароль"}/>
             </div>
-            <div className={"flex gap-2"}>
-                <Checkbox
-                    checked={enabled}
-                    onChange={setEnabled}
-                    className="group block size-4.5 rounded bg-card data-checked:bg-primary shadow-sm"
-                >
-                    <svg className="stroke-white opacity-0 group-data-checked:opacity-100" viewBox="0 0 14 14" fill="none">
-                        <path d="M3 8L6 11L11 3.5" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                </Checkbox>
-                <div className={"text-sm"}>
-                    Подтверждаю согласие на обработку <span className={"font-medium text-primary"}>персональных данных</span>
-                </div>
-
-            </div>
+            <CustomCheckbox label={<p>Подтверждаю согласие на обработку <span className={"font-medium text-primary"}>персональных данных</span></p>} />
             <div className={"text-sm"}>
-                Уже есть аккаунт? <span className={"font-medium text-primary"}>Войти</span>
+                Уже есть аккаунт? <Link className={"font-medium text-primary"} href={"/signin"}>Войти</Link>
             </div>
             <CustomButton variant={"primary"}>Зарегистрироваться</CustomButton>
         </div>
