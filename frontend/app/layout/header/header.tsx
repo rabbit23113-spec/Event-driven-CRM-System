@@ -6,7 +6,7 @@ import HeaderNav from "@/app/components/headerNav";
 
 export const Header = () => {
     return (
-        <header className={"border border-border h-28 w-full flex items-center justify-between px-24 sticky"}>
+        <header className={"border border-border h-28 w-full flex items-center justify-between px-24"}>
             <Logo />
             <HeaderNav />
             <HeaderAuthButtons />

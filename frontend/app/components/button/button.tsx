@@ -10,7 +10,7 @@ export const CustomButton = ({variant, className, children, ...props}: ButtonPro
 
     const variants = {
         primary: "bg-primary text-white hover:bg-primary-hover",
-        outline: "border border-border text-foreground",
+        outline: "border border-border text-foreground hover:bg-card-hover",
         success: "bg-success text-white",
         danger: "bg-danger text-white",
     };
