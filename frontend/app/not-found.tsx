@@ -1,4 +1,4 @@
-import CustomButton from "@/app/components/button";
+import CustomButton from "@/app/components/misc/button";
 import NotFoundPage from "@/app/layout/notFound";
 
 const NotFound = () => {

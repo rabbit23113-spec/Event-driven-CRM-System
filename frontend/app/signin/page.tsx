@@ -1,9 +1,9 @@
 "use client"
 
-import Input from "@/app/components/input";
+import Input from "@/app/components/misc/input";
 import {Checkbox} from "@headlessui/react";
-import CustomButton from "@/app/components/button";
-import CustomCheckbox from "@/app/components/checkbox";
+import CustomButton from "@/app/components/misc/button";
+import CustomCheckbox from "@/app/components/misc/checkbox";
 import Link from "next/link";
 
 const SignInPage = () => {

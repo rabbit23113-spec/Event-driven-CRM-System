@@ -1,8 +1,8 @@
 "use client"
 
-import Logo from "@/app/components/logo";
-import HeaderAuthButtons from "@/app/components/headerAuthButtons";
-import HeaderNav from "@/app/components/headerNav";
+import Logo from "@/app/components/misc/logo";
+import HeaderAuthButtons from "@/app/components/header/headerAuthButtons";
+import HeaderNav from "@/app/components/header/headerNav";
 
 export const Header = () => {
     return (

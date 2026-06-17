@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link";
-import FooterNav from "@/app/components/footerNav";
-import Copyright from "@/app/components/copyright";
+import FooterNav from "@/app/components/footer/footerNav";
+import Copyright from "@/app/components/misc/copyright";
 
 export const Footer = () => {
     return (

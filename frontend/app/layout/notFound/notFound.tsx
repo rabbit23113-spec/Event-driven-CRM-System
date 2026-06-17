@@ -1,4 +1,4 @@
-import CustomButton from "@/app/components/button";
+import CustomButton from "@/app/components/misc/button";
 
 export const NotFoundPage = () => {
     return <div className="flex flex-col gap-12 items-center justify-center h-screen">

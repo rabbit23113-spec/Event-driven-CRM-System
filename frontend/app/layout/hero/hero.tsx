@@ -1,5 +1,5 @@
-import CustomButton from "@/app/components/button";
-import CTAButtons from "@/app/components/ctaButtons";
+import CustomButton from "@/app/components/misc/button";
+import CTAButtons from "@/app/components/landing/ctaButtons";
 
 export const Hero = () => {
     return <div className={"flex items-center justify-center gap-29"}>

@@ -1,6 +1,6 @@
 import Hero from "@/app/layout/hero";
-import Advantages from "@/app/components/advantages";
-import CTA from "@/app/components/cta";
+import Advantages from "@/app/components/landing/advantages";
+import CTA from "@/app/components/landing/cta";
 
 export default function Home() {
     return (
