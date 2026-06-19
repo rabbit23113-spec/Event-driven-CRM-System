@@ -49,3 +49,11 @@ body {
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.recharts-wrapper,
+.recharts-responsive-container,
+.recharts-surface {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
