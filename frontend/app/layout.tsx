@@ -1,6 +1,6 @@
 import type {Metadata} from "next";
 import "./globals.css";
-import Footer from "@/app/layout/footer";
+import Footer from "@/app/layout/FooterLayoutComponent";
 import { Open_Sans, Roboto } from "next/font/google";
 
 export const metadata: Metadata = {
@@ -37,7 +37,6 @@ export default function RootLayout({
         >
         <body className="bg-bg min-h-full flex flex-col">
         {children}
-        <Footer/>
         </body>
         </html>
     );

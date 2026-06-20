@@ -1,4 +1,4 @@
-import CustomButton from "@/app/components/misc/button";
+import CustomButton from "@/app/components/misc/CustomButtonComponent";
 
 export const Lead = (props: {
     name: string,

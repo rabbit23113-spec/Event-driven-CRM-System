@@ -3,7 +3,7 @@
 import {CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import {RechartsDevtools} from "@recharts/devtools";
 import TaskComponent from "@/app/components/tasks/task";
-import CustomButton from "@/app/components/misc/button";
+import CustomButton from "@/app/components/misc/CustomButtonComponent";
 
 const DashboardPage = () => {
     const data = [

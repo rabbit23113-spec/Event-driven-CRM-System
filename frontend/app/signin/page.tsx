@@ -1,18 +1,18 @@
 "use client"
 
-import Input from "@/app/components/misc/input";
+import Input from "@/app/components/misc/CustomInputComponent";
 import {Checkbox} from "@headlessui/react";
-import CustomButton from "@/app/components/misc/button";
-import CustomCheckbox from "@/app/components/misc/checkbox";
+import CustomButton from "@/app/components/misc/CustomButtonComponent";
+import CustomCheckbox from "@/app/components/misc/CustomCheckboxComponent";
 import Link from "next/link";
 
 const SignInPage = () => {
-    return <div className={"min-h-screen w-full justify-center items-center flex flex-col gap-8 pt-24 pb-24"}>
-        <div className={"flex flex-col gap-8 justify-center items-start"}>
-            <div className={"text-foreground text-2xl"}>
+    return <div className={"min-h-screen w-full justify-center items-center flex flex-col gap-6"}>
+        <div className={"flex flex-col gap-6 justify-center items-start"}>
+            <div className={"text-foreground text-xl"}>
                 Вход в систему
             </div>
-            <div className={"flex flex-col gap-12"}>
+            <div className={"flex flex-col gap-6"}>
                 <Input label={"E-mail"} placeholder={"Введите e-mail"}/>
                 <Input label={"Пароль"} placeholder={"Введите пароль"}/>
             </div>

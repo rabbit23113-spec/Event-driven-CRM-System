@@ -1,5 +1,5 @@
 import Deal from "@/app/components/deals/deal";
-import CustomButton from "@/app/components/misc/button";
+import CustomButton from "@/app/components/misc/CustomButtonComponent";
 
 const DealsPage = () => {
     return (
