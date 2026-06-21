@@ -7,11 +7,12 @@ export const ClientComponent = (props: {
     phone: string,
     ownerId: string,
     companyName: string,
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Date,
+    updatedAt: Date,
+    onClick?: () => void,
 }) => {
     return (
-        <div className={"p-3 bg-card text-foreground border border-border rounded-md flex gap-5 flex-col"}>
+        <div onClick={props.onClick} className={"p-3 bg-card text-foreground border border-border rounded-md flex gap-5 flex-col hover:bg-card-hover"}>
             <div className={"flex justify-between items-center gap-3.5"}>
                 <div className={"text-2xl"}>{props.name}</div>
                 <div className={"p-2.5 bg-primary text-card rounded-md"}>{props.status}</div>

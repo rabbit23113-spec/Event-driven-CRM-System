@@ -1,4 +1,4 @@
-import CustomButton from "@/app/components/misc/CustomButtonComponent";
+import {Menu, MenuButton, MenuItems} from "@headlessui/react";
 
 export const LeadComponent = (props: {
     name: string,
@@ -32,6 +32,17 @@ export const LeadComponent = (props: {
                 <div className={"font-medium"}>Источник</div>
                 <div className={"text-sm text-foreground-secondary"}>{props.source}</div>
             </div>
+            <Menu>
+                <MenuButton
+                    className={"outline-0 p-3 text-sm font-roboto font-medium min-w-20 rounded-md bg-card border border-border text-foreground hover:bg-card-hover"}>
+                    Действия
+                </MenuButton>
+                <MenuItems anchor="bottom" className={"p-6 border border-border rounded-md bg-card flex flex-col gap-4"}>
+                    <div className={"font-medium text-sm"}>Изменить</div>
+                    <div className={"font-medium text-sm"}>Удалить</div>
+                </MenuItems>
+            </Menu>
         </div>
+
     )
 }

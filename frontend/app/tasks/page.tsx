@@ -1,4 +1,3 @@
-import TaskComponent from "@/app/components/tasks/TaskComponent";
 
 const TasksPage = () => {
     return (
@@ -8,13 +7,7 @@ const TasksPage = () => {
                     className={"absolute top-6 rounded-md p-2 bg-primary flex items-center justify-center text-card"}>Новые
                 </div>
                 <div className={"flex flex-col gap-6 p-15"}>
-                    <TaskComponent
-                        title={"Разработать макет"}
-                        description={""}
-                        priority={"Высокий"}
-                        assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                        createdAt={new Date()} updatedAt={new Date()}
-                    />
+
                 </div>
             </div>
             <div className={"w-full h-screen flex flex-col justify-between p-5 items-center relative border-r border-border"}>
@@ -22,13 +15,7 @@ const TasksPage = () => {
                     процессе
                 </div>
                 <div className={"flex flex-col gap-5 p-15"}>
-                    <TaskComponent
-                        title={"Разработать макет"}
-                        description={""}
-                        priority={"Высокий"}
-                        assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                        createdAt={new Date()} updatedAt={new Date()}
-                    />
+
                 </div>
             </div>
             <div className={"w-full h-screen flex flex-col justify-between p-5 items-center relative"}>
@@ -36,20 +23,7 @@ const TasksPage = () => {
                     className={"absolute top-5 rounded-md p-2 bg-success flex items-center justify-center text-card"}>Завершенные
                 </div>
                 <div className={"flex flex-col gap-5 p-15"}>
-                    <TaskComponent
-                        title={"Разработать макет"}
-                        description={""}
-                        priority={"Высокий"}
-                        assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                        createdAt={new Date()} updatedAt={new Date()}
-                    />
-                    <TaskComponent
-                        title={"Разработать макет"}
-                        description={""}
-                        priority={"Высокий"}
-                        assignee_id={"Stepan Efimov"} dueDate={new Date()}
-                        createdAt={new Date()} updatedAt={new Date()}
-                    />
+
                 </div>
             </div>
         </div>
