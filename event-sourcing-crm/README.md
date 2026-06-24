@@ -1,3 +1,98 @@
+🇬🇧 
+# Event-driven CRM System
+
+This project is an MVP CRM designed using a microservices architecture with communication via a message broker.
+
+---
+
+## Overview
+
+The project is a minimal-feature CRM system for managing leads, deals, customers, and tasks.
+
+It includes:
+- microservices architecture
+- event-driven communication
+- implementation of distributed systems design patterns
+
+---
+
+## Functionality
+
+- Management of leads, deals, customers, and tasks
+- Minimal RBAC: sales / manager / administrator
+- Asynchronous service-to-service communication via events
+- Full audit log of all system events
+
+---
+
+## Architecture
+
+The system is built on microservices communicating through an event bus.
+
+I chose **RabbitMQ** as the message broker because it provides lower operational complexity compared to Kafka.  
+Redis is used for caching due to fast data access.
+
+### Full list of services:
+
+- **API Gateway** — entry point to the application over HTTP, responsible for routing and communication with microservices.
+- **Auth Sessions Service** — handles authentication (currently JWT-based only). Future Google OAuth support is planned.
+- **Events Service** — persists events from other services into the database. Used for audit logging.
+- **Leads Service** — manages leads.
+- **Clients Service** — manages clients.
+- **Deals Service** — manages deals.
+- **Tasks Service** — manages tasks.
+- **Notes Service** — manages notes.
+- **Users Service** — manages users.
+
+### Types of communication:
+
+- Synchronous: REST over HTTP
+- Asynchronous: RabbitMQ
+
+### Design patterns used:
+
+- Event-driven architecture
+- API Gateway pattern
+- Redis caching
+
+---
+
+## Tech Stack
+
+### Backend
+- NestJS
+- TypeScript
+- PostgreSQL
+- Redis
+
+### Message Broker
+- RabbitMQ
+
+### Infrastructure
+- Docker
+
+### Frontend (in development)
+- React
+- TypeScript
+
+---
+
+## Quick Start
+
+### Requirements
+- Docker
+- Node.js 20+
+
+### Run
+
+```bash
+git clone https://github.com/rabbit23113-spec/Event-driven-CRM-System.git
+cd event-sourcing-crm
+npm run setup
+docker-compose up --build
+```
+
+🇷🇺 
 # Event Sourcing CRM
 
 Данный проект представляет собой MVP CRM, спроектированную на микросервисной архитектуре и коммуникацией посредством брокера сообщений.
@@ -18,9 +113,9 @@
 ## Функциональность
 
 - Управление лидами, сделками, клиентами и задачами
-- минимальный RBAC: sales/manager/administrator
+- Минимальный RBAC: sales/manager/administrator
 - Асинхронное взаимодействие сервисов через события
-- Журнал-аудит действий
+- Журнал аудита со всеми событиями
 
 ---
 
@@ -86,7 +181,8 @@
 ### Запуск проекта
 
 ```bash
-git clone https://github.com/rabbit23113-spec/Event-Sourcing-CRM.git
+git clone https://github.com/rabbit23113-spec/Event-driven-CRM-System.git
 cd event-sourcing-crm
 npm run setup
 docker-compose up --build
+```
